@@ -2,20 +2,28 @@ Noop CLI
 ========
 Interactive command line interface for Noop Platform and local development
 
-## Approach
+## Local Install
+```
+git clone git@github.com:rearc/noop-cli.git
+cd noop-cli
+npm install
+npm link
+```
 
+## Commands
+#### Run the app in local development mode which auto reloads
+`noop run`
 
-## Example Commands
 #### Analyze current project directory and display summary information
-`noop info`
+`noop info` (not implemented)
 
 #### Initialize a new project
-`noop init`
+`noop init` (not implemented)
 
 Auto-detect what we can from the repo and then interact with user to provide additional detail.
 
 #### Create new a component
-`noop add component --type service --template nodejs --name ProductSite`
+`noop add component --type service --template nodejs --name ProductSite` (not implemented)
 
 Parameters
 - name? (do components have names?)
@@ -23,14 +31,8 @@ Parameters
 - template
 
 #### Create a new resource for the current component
-`noop add resource --type mysql --name products`
+`noop add resource --type mysql --name products` (not implemented)
 
 Parameters
 - name
 - type (mysql, dynamodb, s3)
-
-#### Run the app in local development mode
-`noop run`
-
-#### Run in local development mode, auto refresh on code change
-`noop watch`
