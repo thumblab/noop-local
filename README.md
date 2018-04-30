@@ -2,6 +2,9 @@ Noop CLI
 ========
 Interactive command line interface for Noop Platform and local development
 
+## Package Install
+`npm install -g @rearc/noop` (not available yet)
+
 ## Local Install
 ```
 git clone git@github.com:rearc/noop-cli.git
