@@ -1,35 +1,72 @@
 const express = require('express')
 const app = express()
 const routes = (process.env.ROUTES) ? JSON.parse(process.env.ROUTES) : []
-const request = require('request')
+// const request = require('request')
+const http = require('http')
+let requestCount = 0
 
 routes.sort((a, b) => {
   return a.path.length < b.path.length
 })
 
 routes.forEach((route) => {
-  app[route.method.toLowerCase()](route.path, (req, res) => {
+  app[route.method.toLowerCase()](route.path, (clientRequest, clientResponse) => {
     const startTime = new Date().getTime()
+    requestCount++
+    clientRequest.requestCount = requestCount
+    console.log(
+      `REQ #${clientRequest.requestCount}`,
+      clientRequest.method,
+      clientRequest.path,
+      '->',
+      route.component
+    )
     const options = {
-      uri: `http://${route.hostname}${req.path}`,
-      port: 80,
-      method: req.method
+      hostname: route.hostname,
+      method: clientRequest.method,
+      path: clientRequest.path,
+      timeout: 5000,
+      headers: clientRequest.headers
     }
-    request(options, (err, proxyRes, body) => {
-      const duration = (new Date().getTime() - startTime) + 'ms'
-      if (err) {
-        console.log(req.method, req.path, route.component, duration, 504, err.code)
-        return res.status(500).end('Noop local application router error: ' + err.code)
-      }
-      res.status(proxyRes.statusCode).set(proxyRes.headers).end(body)
-      console.log(
-        req.method,
-        req.path,
-        route.component,
-        duration,
-        proxyRes.statusCode
-      )
+    const serverRequest = http.request(options, (serverResponse) => {
+      clientResponse.statusCode = serverResponse.statusCode
+      clientResponse.statusMessage = serverResponse.statusMessage
+      clientResponse.headers = serverResponse.headers
+      // clientResponse.writeHead()
+      serverResponse.on('data', (chunk) => {
+        clientResponse.size += chunk.length
+        clientResponse.write(chunk)
+      })
+      serverResponse.on('end', () => {
+        logResponse()
+        clientResponse.end()
+      })
     })
+    clientResponse.size = 0
+    serverRequest.on('error', (err) => {
+      clientResponse.statusCode = 500
+      clientResponse.statusMessage = `NoopRouterError`
+      clientResponse.write(`Noop router error: ${err.code}`)
+      logResponse()
+      clientResponse.end()
+    })
+    clientRequest.on('data', (chunk) => {
+      serverRequest.write(chunk)
+    })
+    clientRequest.on('end', () => {
+      serverRequest.end()
+    })
+    function logResponse () {
+      const duration = (new Date().getTime() - startTime) + 'ms'
+      clientResponse.end()
+      console.log(
+        `RES #${clientRequest.requestCount}`,
+        duration,
+        `${clientResponse.size}b`,
+        clientResponse.statusCode,
+        clientResponse.statusMessage
+      )
+    }
   })
 })
 
