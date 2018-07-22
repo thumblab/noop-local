@@ -6,11 +6,11 @@ const http = require('http')
 let requestCount = 0
 
 routes.sort((a, b) => {
-  return a.path.length < b.path.length
+  return a.pattern.length < b.pattern.length
 })
 
 routes.forEach((route) => {
-  app[route.method.toLowerCase()](route.path, (clientRequest, clientResponse) => {
+  app[route.method.toLowerCase()](route.pattern, (clientRequest, clientResponse) => {
     const startTime = new Date().getTime()
     requestCount++
     clientRequest.requestCount = requestCount
@@ -19,7 +19,7 @@ routes.forEach((route) => {
       clientRequest.method,
       clientRequest.path,
       '->',
-      route.component
+      route.componentName
     )
     const options = {
       hostname: route.hostname,
