@@ -1,6 +1,23 @@
 {
-  "name": "noop",
-  "bin": "./cli.js",
+  "name": "@rearc/noop-cli",
+  "bin": {
+    "noop": "./cli.js"
+  },
+  "version": "0.1.1",
+  "description": "Noop CLI",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rearc/noop-cli.git"
+  },
+  "keywords": [
+    "noop"
+  ],
+  "author": "Chloe Wintzer",
+  "license": "GPL",
+  "bugs": {
+    "url": "https://github.com/rearc/noop-cli/issues"
+  },
+  "homepage": "https://github.com/rearc/noop-cli#readme",
   "dependencies": {
     "@rearc/noop-discovery": "^1.0.4",
     "async": "^2.6.1",
