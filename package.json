@@ -2,7 +2,7 @@
   "name": "noop",
   "bin": "./cli.js",
   "dependencies": {
-    "@rearc/noop-discovery": "^1.0.3",
+    "@rearc/noop-discovery": "^1.0.4",
     "async": "^2.6.1",
     "chalk": "^2.4.1",
     "docker-file-parser": "^1.0.3",
