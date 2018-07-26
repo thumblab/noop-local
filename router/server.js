@@ -1,7 +1,8 @@
+const https = require('https')
 const express = require('express')
 const app = express()
 const routes = (process.env.ROUTES) ? JSON.parse(process.env.ROUTES) : []
-// const request = require('request')
+const fs = require('fs')
 const http = require('http')
 let requestCount = 0
 
@@ -69,5 +70,10 @@ routes.forEach((route) => {
     }
   })
 })
+
+https.createServer({
+  cert: fs.readFileSync('./certificates/localnoop.app.cert'),
+  key: fs.readFileSync('./certificates/localnoop.app.key')
+}, app).listen(443)
 
 app.listen(80)
