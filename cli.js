@@ -11,7 +11,7 @@ console.log(`Noop CLI v${version}`)
 cli.command('run [port]', 'run local dev server', (yargs) => {
   yargs.positional('port', {
     describe: 'port to bind local dev server',
-    default: 4444
+    default: 1234
   })
 }, runCommand)
 

@@ -20,10 +20,10 @@ npm link
 
 ## Commands
 #### Run the app in local development mode which auto reloads
-`noop run`
+`noop run [port] [-e componentname.ENV_KEY=Value] [--envFile .devEnv]`
 
 #### Analyze current project directory and display summary information
-`noop info` (not implemented)
+`noop inspect`
 
 #### Initialize a new project
 `noop init` (not implemented)
