@@ -8,7 +8,7 @@ Interactive command line interface for Noop Platform and local development
 - docker
 
 ## Package Install
-`npm install -g @rearc/noop` (not available yet)
+`npm install -g @rearc/noop-cli`
 
 ## Local Install
 ```
@@ -21,6 +21,8 @@ npm link
 ## Commands
 #### Run the app in local development mode which auto reloads
 `noop run [port] [-e componentname.ENV_KEY=Value] [--envFile .devEnv]`
+
+If a `.noopEnv` file exists in the root of the application, it will automatically be read.
 
 #### Analyze current project directory and display summary information
 `noop inspect`
