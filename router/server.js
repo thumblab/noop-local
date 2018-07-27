@@ -24,6 +24,7 @@ routes.forEach((route) => {
     )
     const options = {
       hostname: route.hostname,
+      port: route.port,
       method: clientRequest.method,
       path: clientRequest.path,
       timeout: 5000,
