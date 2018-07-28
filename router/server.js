@@ -6,10 +6,6 @@ const fs = require('fs')
 const http = require('http')
 let requestCount = 0
 
-routes.sort((a, b) => {
-  return a.pattern.length < b.pattern.length
-})
-
 routes.forEach((route) => {
   app[route.method.toLowerCase()](route.pattern, (clientRequest, clientResponse) => {
     const startTime = new Date().getTime()
