@@ -27,6 +27,10 @@ If a `.noopEnv` file exists in the root of the application, it will automaticall
 #### Analyze current project directory and display summary information
 `noop inspect`
 
+#### Reset state of a resource
+Resources run through the Noop Dev Server persist state between runs. To clear this state run:
+`noop reset <resourceName>`
+
 #### Initialize a new project
 `noop init` (not implemented)
 

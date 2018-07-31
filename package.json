@@ -3,7 +3,7 @@
   "bin": {
     "noop": "./cli.js"
   },
-  "version": "0.1.8",
+  "version": "0.1.9",
   "description": "Noop CLI",
   "repository": {
     "type": "git",
@@ -31,6 +31,7 @@
     "jsonpath": "^1.0.0",
     "mkdirp": "^0.5.1",
     "recursive-readdir": "^2.2.2",
+    "rimraf": "^2.6.2",
     "tar-fs": "^1.16.3",
     "tar-stream": "^1.6.1",
     "vorpal": "^1.12.0",
