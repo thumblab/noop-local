@@ -6,6 +6,18 @@ const fs = require('fs')
 const http = require('http')
 let requestCount = 0
 
+routes.sort((route1, route2) => {
+  segs1 = route1.replace(/\/+$/, '').split('/')
+  segs2 = route2.replace(/\/+$/, '').split('/')
+  if (segs1.length === segs2.length) {
+    for (var i = 0; i < segs1.length; ++i) {
+      if (segs1[i] === '*' && segs2[i] !== '*') return 1
+      else if (segs1[i] !== '*' && segs2[i] === '*') return -1
+    }
+  }
+  return segs2.length - segs1.length
+})
+
 routes.forEach((route) => {
   app[route.method.toLowerCase()](route.pattern, (clientRequest, clientResponse) => {
     const startTime = new Date().getTime()
