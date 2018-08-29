@@ -3,7 +3,7 @@
   "bin": {
     "noop": "./cli.js"
   },
-  "version": "0.1.16",
+  "version": "0.1.17",
   "description": "Noop CLI",
   "repository": {
     "type": "git",
@@ -19,11 +19,11 @@
   },
   "homepage": "https://github.com/rearc/noop-cli#readme",
   "dependencies": {
-    "@rearc/noop-discovery": "^1.0.17",
+    "@rearc/noop-discovery": "^1.0.18",
     "async": "^2.6.1",
     "chalk": "^2.4.1",
     "docker-file-parser": "^1.0.3",
-    "dockerode": "^2.5.5",
+    "dockerode": "^2.5.6",
     "file-match": "^1.0.2",
     "filewatcher": "^3.0.1",
     "git-root-dir": "^1.0.2",
