@@ -6,6 +6,12 @@ const fs = require('fs')
 const http = require('http')
 let requestCount = 0
 
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*")
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
+  next()
+})
+
 routes.forEach((route) => {
   app[route.method.toLowerCase()](route.pattern, (clientRequest, clientResponse) => {
     const startTime = new Date().getTime()
