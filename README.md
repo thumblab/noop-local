@@ -20,7 +20,7 @@ npm link
 
 ## Commands
 #### Run the app in local development mode which auto reloads
-`noop run [port] [-e componentname.ENV_KEY=Value] [--envFile .devEnv]`
+`noop run [port] [-e componentname.ENV_KEY=Value] [--envFile .devEnv] [-e ENV_KEY=Value]`
 
 If a `.noopEnv` file exists in the root of the application, it will automatically be read.
 
