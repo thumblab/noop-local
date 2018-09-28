@@ -29,7 +29,7 @@ routes.forEach((route) => {
       hostname: route.hostname,
       port: route.port,
       method: clientRequest.method,
-      path: clientRequest.path,
+      path: clientRequest.originalUrl,
       timeout: 5000,
       headers: clientRequest.headers
     }
