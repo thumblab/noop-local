@@ -31,6 +31,7 @@
     "jsonpath": "^1.0.0",
     "mkdirp": "^0.5.1",
     "moment": "^2.22.2",
+    "path-to-regexp": "^2.4.0",
     "recursive-readdir": "^2.2.2",
     "rimraf": "^2.6.2",
     "tar-fs": "^1.16.3",

@@ -6,6 +6,7 @@ const version = require('./package.json').version
 const runCommand = require('./lib/commands/run')
 const inspectCommand = require('./lib/commands/inspect')
 const resetCommand = require('./lib/commands/reset')
+const routeCommand = require('./lib/commands/route')
 
 console.log(`Noop CLI v${version}`)
 
@@ -23,6 +24,15 @@ cli.command('reset [resourceName]', 'reset resource state', (yargs) => {
     describe: 'name of resource to reset state'
   })
 }, resetCommand)
+
+cli.command('route [method] [path]', 'evaluate routing of a specific request', (yargs) => {
+  yargs.positional('method', {
+    describe: 'HTTP method for evaluation (GET, PUT, POST, DELETE)'
+  }),
+  yargs.positional('path', {
+    describe: 'HTTP path for evaluation like /foo/bar'
+  })
+}, routeCommand)
 
 const argv = cli.argv // no idea wtf reading `argv` props does to make it work
 if (debug) console.log(argv)
