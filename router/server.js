@@ -34,10 +34,7 @@ routes.forEach((route) => {
       headers: clientRequest.headers
     }
     const serverRequest = http.request(options, (serverResponse) => {
-      clientResponse.statusCode = serverResponse.statusCode
-      clientResponse.statusMessage = serverResponse.statusMessage
-      clientResponse.headers = serverResponse.headers
-      // clientResponse.writeHead()
+      clientResponse.writeHead(serverResponse.statusCode, serverResponse.headers)
       serverResponse.on('data', (chunk) => {
         clientResponse.size += chunk.length
         clientResponse.write(chunk)
