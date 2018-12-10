@@ -29,7 +29,7 @@ If a `.noopEnv` file exists in the root of the application, it will automaticall
 
 #### Reset state of a resource
 Resources run through the Noop Dev Server persist state between runs. To clear this state run:
-`noop reset <resourceName>`
+`noop reset <resourceName>` Example if your db resource state is corrupted because a bad version of the database was installed initially).
 
 #### Initialize a new project
 `noop init` (not implemented)
