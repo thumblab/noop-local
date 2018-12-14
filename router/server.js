@@ -25,7 +25,9 @@ routes.forEach((route) => {
       '->',
       route.componentName
     )
-    if (clientRequest.secure) { clientRequest.headers['X-forwarded-proto'] = 'https'; } // If component is expecting ssl termination but proxy (noop router) layer is actually terminating ssl
+    if (clientRequest.secure) { 
+      clientRequest.headers['X-forwarded-proto'] = 'https'
+    }
     const options = {
       hostname: route.hostname,
       port: route.port,
