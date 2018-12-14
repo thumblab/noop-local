@@ -25,6 +25,9 @@ routes.forEach((route) => {
       '->',
       route.componentName
     )
+    if (clientRequest.secure) { 
+      clientRequest.headers['X-forwarded-proto'] = 'https'
+    }
     const options = {
       hostname: route.hostname,
       port: route.port,
