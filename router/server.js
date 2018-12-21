@@ -5,6 +5,7 @@ const routes = (process.env.ROUTES) ? JSON.parse(process.env.ROUTES) : []
 const fs = require('fs')
 const http = require('http')
 let requestCount = 0
+const crypto = require('crypto')
 
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*")
@@ -18,6 +19,8 @@ routes.forEach((route) => {
     const startTime = new Date().getTime()
     requestCount++
     clientRequest.requestCount = requestCount
+    clientRequest.id = crypto.randomBytes(4).toString('hex') + `#${requestCount}`
+    clientResponse.header('X-Request-ID', clientRequest.id)
     console.log(
       `REQ #${clientRequest.requestCount}`,
       clientRequest.method,
