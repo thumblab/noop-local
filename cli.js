@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+process.title = 'noop'
 const cli = require('yargs')
 const debug = (process.env.DEBUG === 'true')
 const version = require('./package.json').version
