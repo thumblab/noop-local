@@ -1,10 +1,10 @@
 {
-  "name": "@rearc/noop-cli",
+  "name": "noop-local",
   "bin": {
     "noop": "./cli.js"
   },
-  "version": "0.1.52",
-  "description": "Noop CLI",
+  "version": "0.5.1",
+  "description": "Noop Local Development Server",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/rearc/noop-cli.git"

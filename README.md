@@ -1,6 +1,6 @@
-Noop CLI
+Noop Local
 ========
-Interactive command line interface for Noop Platform and local development
+Interactive command line interface for local development of noop apps.
 
 ## Requirements
 - node
@@ -8,12 +8,12 @@ Interactive command line interface for Noop Platform and local development
 - docker
 
 ## Package Install
-`npm install -g @rearc/noop-cli`
+`npm install -g noop-local`
 
 ## Local Install
 ```
-git clone git@github.com:rearc/noop-cli.git
-cd noop-cli
+git clone git@github.com:rearc/noop-local.git
+cd noop-local
 npm install
 npm link
 ```
