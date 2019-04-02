@@ -17,6 +17,9 @@
   "bugs": {
     "url": "https://github.com/rearc/noop-cli/issues"
   },
+  "scripts": {
+    "postinstall": "pushd lib/inspector/console && mkdir -p node_modules && npm install && npm run build && popd"
+  },
   "homepage": "https://github.com/rearc/noop-cli#readme",
   "dependencies": {
     "@rearc/noop-discovery": "^1.0.29",
