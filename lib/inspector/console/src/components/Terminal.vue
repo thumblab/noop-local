@@ -37,7 +37,6 @@ export default {
       this.width = w
       this.height = h
       this.ws.send(JSON.stringify({w, h}))
-      console.log('resize', h, w)
     }
   },
   mounted () {
