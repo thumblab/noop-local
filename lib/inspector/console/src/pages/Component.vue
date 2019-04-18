@@ -32,7 +32,7 @@
       <div class="col-6 flex full">
         <b-card no-body class="text-left logs-card">
           <template slot="header">
-            Component Logs
+            Component Logs <b-badge variant="success">live</b-badge>
           </template>
           <LogStream :path="`/components/${this.$route.params.componentId}/logs`" />
         </b-card>

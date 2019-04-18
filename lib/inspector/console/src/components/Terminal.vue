@@ -17,23 +17,39 @@ export default {
     return {
       terminal,
       ws,
-      connected: false
+      connected: false,
+      height: 0,
+      width: 0
+    }
+  },
+  created () {
+    window.addEventListener('resize', this.handleResize)
+  },
+  destroyed () {
+    window.removeEventListener('resize', this.handleResize);
+  },
+  methods: {
+    handleResize () {
+      this.terminal.fit()
+      const w = this.terminal.cols
+      const h = this.terminal.rows
+      if (w === this.width && h === this.height) return null
+      this.width = w
+      this.height = h
+      this.ws.send(JSON.stringify({w, h}))
+      console.log('resize', h, w)
     }
   },
   mounted () {
     const element = this.$refs.terminal
     this.terminal.open(element)
-    this.terminal.fit()
     this.terminal.on('data', (data) => {
       const payload = new Buffer(data).toString('base64')
       this.ws.send(JSON.stringify({ d: payload }))
     })
     this.ws.onopen = () => {
       this.connected = true
-      this.ws.send(JSON.stringify({
-        w: this.terminal.cols,
-        h: this.terminal.rows
-      }))
+      this.handleResize()
     }
     this.ws.onclose = () => {
       this.connected = false
