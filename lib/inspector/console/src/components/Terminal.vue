@@ -1,5 +1,5 @@
 <template>
-  <div ref="terminal"></div>
+  <div ref="terminal" class="terminal"></div>
 </template>
 
 <script>
@@ -26,7 +26,7 @@ export default {
     this.terminal.fit()
     this.terminal.on('data', (data) => {
       const payload = new Buffer(data).toString('base64')
-      this.ws.send(JSON.stringify({d: payload}))
+      this.ws.send(JSON.stringify({ d: payload }))
     })
     this.ws.onopen = () => {
       this.connected = true
@@ -56,5 +56,8 @@ export default {
 </script>
 
 <style>
-
+.terminal {
+  padding: 6px;
+  background-color: black;
+}
 </style>

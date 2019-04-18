@@ -6,7 +6,7 @@
 
 <script>
 export default {
-computed: {
+  computed: {
     component (state) {
       return state.$store.getters['components/byId'](this.$route.params.componentId) || {}
     },
