@@ -2,7 +2,7 @@
   <div id="app">
     <div id="top" class="container-fluid">
       <div id="header" class="row">
-        <div id="logo" class="col-auto text-left">
+        <div id="logo" class="col-auto text-left" @click="$router.push('/')">
           <img alt="Rearc logo" src="./assets/logo_darkbackground.png" class="logo">
         </div>
         <div id="title" class="col text-left">
@@ -32,8 +32,16 @@ export default {
 </script>
 
 <style>
-html, body, #app, #main {
+html, body, #app {
   height: 100%;
+}
+
+#main {
+  position: absolute;
+  top: 70px;
+  left: 0;
+  right: 0;
+  bottom: 15px;
 }
 
 body {
@@ -45,7 +53,7 @@ body {
   color: #fff;
   padding: 3px 0;
   margin: 0 -15px;
-  height: 30px;
+  height: 10px;
 }
 
 #app {
@@ -92,5 +100,27 @@ body {
 .logo {
   max-height: 28px;
   margin: 17px 0 12px;
+  cursor: pointer;
+}
+
+.full {
+  height: 100%;
+}
+
+.flexrow {
+  position: absolute;
+  bottom: 0;
+  top: 75px;
+  left: 15px;
+  right: 15px;
+}
+
+.flex {
+  display: flex;
+  flex-flow: column;
+}
+
+.grow {
+  flex-grow: 1;
 }
 </style>

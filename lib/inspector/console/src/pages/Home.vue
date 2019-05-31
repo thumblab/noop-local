@@ -1,11 +1,11 @@
 <template>
-  <div>
+  <div id="home">
     <div>
       <h4 class="float-left">{{app.root}}</h4>
       <b-button-toolbar class="float-right">
         <b-button-group class="mx-1">
           <b-button variant="primary" @click="openBrowser"><icon icon="globe" /> Open in Browser</b-button>
-          <b-button variant="primary" v-b-popover.hover.bottom="'Coming soon to a developer near you!'"><icon icon="code" /> API Explorer</b-button>
+          <b-button variant="primary" @click="$router.push('/explorer')"><icon icon="code" /> API Explorer</b-button>
         </b-button-group>
         <b-button-group class="mx-1">
           <b-button variant="warning" v-b-modal.restart-modal><icon icon="sync" /> Restart</b-button>
@@ -15,15 +15,20 @@
       </b-button-toolbar>
     </div>
     <div class="clearfix"></div>
-    <div class="row">
-      <div class="col-4">
+    <div class="row flexrow">
+      <div class="col-4 flex full">
         <b-card no-body class="text-left">
           <template slot="header">
             <icon icon="server" /> Components
           </template>
           <b-list-group flush>
+            <b-list-group-item button>
+              <h1 class="float-left mr-2 mb-0"><icon icon="book" /></h1>
+              <h5 class="mb-0">Component Guide</h5>
+              Learn more about running your code using functions, services, tasks, and more on noop.
+            </b-list-group-item>
             <b-list-group-item button v-for="component in components" v-bind:key="component.id" @click="$router.push(`/components/${component.id}`)">
-              <strong>{{component.id}}</strong>&nbsp;<b-badge variant="info">{{component.type}}</b-badge>
+              <strong>{{component.id}}</strong><b-badge class="float-right" variant="info">{{component.type}}</b-badge>
               <br />
               <small>{{component.root.substring(app.root.length)}}</small>
             </b-list-group-item>
@@ -31,12 +36,17 @@
           <p v-if="!components.length">No components available</p>
         </b-card>
       </div>
-      <div class="col-4">
+      <div class="col-4 flex full">
         <b-card no-body class="text-left">
           <template slot="header">
             <icon icon="database" /> Resources
           </template>
           <b-list-group flush>
+            <b-list-group-item button>
+              <h1 class="float-left mr-2 mb-0"><icon icon="book" /></h1>
+              <h5 class="mb-0">Resource Guide</h5>
+              Learn more about leveraging databases, queues, and other backend services within your noop app.
+            </b-list-group-item>
             <b-list-group-item button v-for="resource in resources" v-bind:key="resource.id" @click="$router.push(`/resources/${resource.id}`)">
               <strong>{{resource.id}}</strong>
               <br />
@@ -46,13 +56,8 @@
         </b-card>
         <p v-if="!resources.length">No resources running</p>
       </div>
-      <div class="col-4">
-        <b-card class="text-left">
-          <template slot="header">
-            <icon icon="traffic-light" /> Traffic
-          </template>
-          <b-card-text>Live traffic inspection coming soon to a developer near you!</b-card-text>
-        </b-card>
+      <div class="col-4 flex full">
+        <TrafficCard />
       </div>
     </div>
     <b-modal id="reset-modal" title="Reset Confirmation" @ok="handleReset" okTitle="Reset!" okVariant="danger">
@@ -65,7 +70,11 @@
         Are you sure you want to stop your local development environment of this app?
       </p>
     </b-modal>
-    <b-modal id="restart-modal" title="Restart Confirmation" @ok="handleRestart" okTitle="Restart!" okVariant="warning">
+    <b-modal id="restart-modal" title="Restart Confirmation" @ok="handleRestart" okVariant="warning" :busy="restarting">
+      <template slot="modal-ok">
+        <span v-if="restarting">Restarting <icon icon="sync" spin /></span>
+        <span v-else>Restart!</span>
+      </template>
       <p class="text-left">
         Are you sure you want to restart your local development environment of this app?
       </p>
@@ -75,8 +84,18 @@
 
 <script>
 import pretty from '@/pretty'
+import TrafficCard from '@/components/TrafficCard.vue'
+import { request } from '@/api'
 
 export default {
+  data () {
+    return {
+      restarting: false
+    }
+  },
+  components: {
+    TrafficCard
+  },
   computed: {
     app (state) {
       return state.$store.getters['app/get']()
@@ -101,13 +120,17 @@ export default {
       window.open('https://localnoop.app:1234', '_blank')
     },
     handleReset () {
-      console.log('reset requested')
+      request.post('/server/reset')
     },
     handleStop () {
-      console.log('stop requested')
+      request.post('/server/stop')
     },
-    handleRestart () {
-      console.log('restart requested')
+    handleRestart (event) {
+      event.cancel()
+      this.restarting = true
+      request.post('/server/restart').then(() => {
+        location.reload()
+      })
     }
   },
   created () {
@@ -118,6 +141,14 @@ export default {
 
 <style scoped>
 .row {
-    margin-top: 12px; 
+    margin-top: 0; 
+}
+
+#home {
+  height: 100%;
+}
+
+h1 {
+  font-size: 2.5em;
 }
 </style>

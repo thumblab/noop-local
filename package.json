@@ -3,11 +3,11 @@
   "bin": {
     "noop": "./cli.js"
   },
-  "version": "0.5.11",
+  "version": "0.9.0",
   "description": "Noop Local Development Server",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/rearc/noop-cli.git"
+    "url": "git+https://github.com/rearc/noop-local.git"
   },
   "keywords": [
     "noop"
@@ -15,12 +15,12 @@
   "author": "Chloe Wintzer",
   "license": "GPL",
   "bugs": {
-    "url": "https://github.com/rearc/noop-cli/issues"
+    "url": "https://github.com/rearc/noop-local/issues"
   },
   "scripts": {
     "postinstall": "pushd lib/inspector/console && mkdir -p node_modules && npm install && npm run build && popd"
   },
-  "homepage": "https://github.com/rearc/noop-cli#readme",
+  "homepage": "https://github.com/rearc/noop-local#readme",
   "dependencies": {
     "@rearc/noop-discovery": "^1.0.29",
     "async": "^2.6.1",
@@ -40,6 +40,7 @@
     "moment": "^2.22.2",
     "path-to-regexp": "^2.4.0",
     "recursive-readdir": "^2.2.2",
+    "request": "^2.88.0",
     "rimraf": "^2.6.2",
     "tar-fs": "^1.16.3",
     "tar-stream": "^1.6.2",
