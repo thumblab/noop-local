@@ -26,13 +26,13 @@
             <b-collapse id="summary" visible role="tabpanel">
               <b-list-group flush>
                 <b-list-group-item>
-                  <strong>Component Type</strong><span class="float-right">{{component.type}}</span>
+                  <strong>Component Type</strong><span class="float-right text-right">{{component.type}}</span>
                 </b-list-group-item>
                 <b-list-group-item>
-                  <strong>Root Folder</strong><span class="float-right">{{component.root}}</span>
+                  <strong>Root Folder</strong><span class="float-right text-right">{{component.root}}</span>
                 </b-list-group-item>
                 <b-list-group-item>
-                  <strong>Listening Port</strong><span class="float-right">{{component.port}}</span>
+                  <strong>Listening Port</strong><span class="float-right text-right">{{component.port}}</span>
                 </b-list-group-item>
                 <b-list-group-item>
                   <strong>Resource Dependencies</strong>
