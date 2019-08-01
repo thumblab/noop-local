@@ -1,4 +1,4 @@
-FROM node:slim
+FROM node:8-alpine
 WORKDIR /router
 COPY package.json package.json
 RUN npm install
