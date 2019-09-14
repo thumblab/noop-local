@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/rearc/noop-local#readme",
   "dependencies": {
-    "@rearc/noop-discovery": "^1.0.31",
+    "@rearc/noop-discovery": "^1.0.32",
     "async": "^2.6.1",
     "chalk": "^2.4.1",
     "cors": "^2.8.5",
