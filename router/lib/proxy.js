@@ -126,8 +126,8 @@ class Proxy extends Events.EventEmitter {
 
   listenHttps (port) {
     https.createServer({
-      cert: fs.readFileSync('./certificates/localnoop.app.cert'),
-      key: fs.readFileSync('./certificates/localnoop.app.key')
+      cert: process.env.CERTIFICATE_CHAIN,
+      key: process.env.CERTIFICATE_KEY
     }, this.app).listen(port)
   }
 }
