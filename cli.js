@@ -8,8 +8,9 @@ const runCommand = require('./lib/commands/run')
 const inspectCommand = require('./lib/commands/inspect')
 const resetCommand = require('./lib/commands/reset')
 const routeCommand = require('./lib/commands/route')
+const connectCommand = require('./lib/commands/connect')
 
-console.log(`Noop CLI v${version}`)
+console.log(`noop-local v${version}`)
 
 cli.command('run [port]', 'run local dev server', (yargs) => {
   yargs.positional('port', {
@@ -34,6 +35,12 @@ cli.command('route [method] [path]', 'evaluate routing of a specific request', (
     describe: 'HTTP path for evaluation like /foo/bar'
   })
 }, routeCommand)
+
+cli.command('connect [resourceId]', 'connect to platform managed resource', (yargs) => {
+  yargs.positional('resourceId', {
+    describe: 'ID of the resources you\'d like to directly connect to'
+  })
+}, connectCommand)
 
 const argv = cli.argv // no idea wtf reading `argv` props does to make it work
 if (debug) console.log(argv)
