@@ -3,7 +3,7 @@
   "bin": {
     "noop": "./cli.js"
   },
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Noop Local Development Server",
   "repository": {
     "type": "git",
@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/rearc/noop-local#readme",
   "dependencies": {
-    "noop-discovery": "^1.2.1",
+    "noop-discovery": "^1.2.2",
     "async": "^2.6.1",
     "chalk": "^2.4.1",
     "cors": "^2.8.5",
