@@ -32,7 +32,7 @@
                   <strong>Root Folder</strong><span class="float-right text-right">{{component.root}}</span>
                 </b-list-group-item>
                 <b-list-group-item>
-                  <strong>Listening Port</strong><span class="float-right text-right">{{component.port}}</span>
+                  <strong>Listening Port</strong><span class="float-right text-right">{{component.params.port}}</span>
                 </b-list-group-item>
                 <b-list-group-item>
                   <strong>Resource Dependencies</strong>
