@@ -120,7 +120,7 @@ export default {
           return [
             {
               name: 'Noopfile',
-              code: `RESOURCE ${this.resource.id} postgres\n` +
+              code: `RESOURCE ${this.resource.id} postgresql\n` +
                 `ENV DATABASE_URL $.resources.${this.resource.id}.url`
             }
           ]
