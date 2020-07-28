@@ -18,7 +18,7 @@
     "url": "https://github.com/rearc/noop-local/issues"
   },
   "scripts": {
-    "postinstall": "pushd lib/inspector/console && mkdir -p node_modules && npm install && npm run build && popd"
+    "postinstall": "npm install --prefix lib/inspector/console && npm run build --prefix lib/inspector/console"
   },
   "homepage": "https://github.com/rearc/noop-local#readme",
   "dependencies": {
