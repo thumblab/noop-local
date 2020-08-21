@@ -6,7 +6,7 @@
           <img alt="Rearc logo" src="./assets/logo_darkbackground.png" class="logo">
         </div>
         <div id="title" class="col text-left">
-          noop local inspector
+          Noop Local Inspector
         </div>
         <div class="coll text-right">
           <ChangesIndicator />
@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import ChangesIndicator from '@/components/ChangesIndicator.vue'
+import ChangesIndicator from './components/ChangesIndicator.vue'
 
 export default {
   components: {

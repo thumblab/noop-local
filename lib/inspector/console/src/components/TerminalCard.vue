@@ -12,14 +12,14 @@
 
 <script>
 import { Terminal } from 'xterm'
-import * as fit from 'xterm/lib/addons/fit/fit'
-import { baseUrl } from '@/api'
-Terminal.applyAddon(fit)
+import { FitAddon } from 'xterm-addon-fit'
+import { baseUrl } from '../api'
 
 export default {
   data () {
     return {
       terminal: null,
+      fitAddOn: null,
       ws: null,
       connected: false,
       height: 0,
@@ -37,9 +37,11 @@ export default {
     connect () {
       if (this.terminal) this.terminal.destroy()
       this.terminal = new Terminal({rows: 16})
+      this.fitAddOn = new FitAddon()
+      this.terminal.loadAddon(this.fitAddOn)
       const element = this.$refs.terminal
       this.terminal.open(element)
-      this.terminal.on('data', (data) => {
+      this.terminal.onData((data) => {
         const payload = new Buffer(data).toString('base64')
         this.ws.send(JSON.stringify({ d: payload }))
       })
@@ -68,7 +70,7 @@ export default {
       }
     },
     handleResize () {
-      this.terminal.fit()
+      this.fitAddOn.fit()
       const w = this.terminal.cols
       const h = this.terminal.rows
       if (w === this.width && h === this.height) return null

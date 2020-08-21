@@ -102,12 +102,12 @@
 </template>
 
 <script>
-import LogCard from '@/components/LogCard.vue'
-import Variables from '@/components/Variables.vue'
-import TerminalCard from '@/components/TerminalCard.vue'
-import PerformanceBar from '@/components/PerformanceBar.vue'
+import LogCard from '../components/LogCard'
+import Variables from '../components/Variables.vue'
+import TerminalCard from '../components/TerminalCard.vue'
+import PerformanceBar from '../components/PerformanceBar.vue'
 import moment from 'moment'
-import { request } from '@/api'
+import { request } from '../api'
 
 export default {
   components: {

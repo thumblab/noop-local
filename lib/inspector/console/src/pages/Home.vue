@@ -83,9 +83,9 @@
 </template>
 
 <script>
-import pretty from '@/pretty'
-import TrafficCard from '@/components/TrafficCard.vue'
-import { request } from '@/api'
+import pretty from '../pretty'
+import TrafficCard from '../components/TrafficCard'
+import { request } from '../api'
 
 export default {
   data () {

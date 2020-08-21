@@ -28,9 +28,9 @@
 </template>
 
 <script>
-import { baseUrl } from '@/api'
+import { baseUrl } from '../api'
 import moment from 'moment'
-import LogTreeItem from '@/components/LogTreeItem.vue'
+import LogTreeItem from './LogTreeItem.vue'
 
 export default {
   props: ['path'],

@@ -125,7 +125,7 @@
 <script>
 import prettysize from 'prettysize'
 import contentType from 'content-type'
-import { request } from '@/api'
+import { request } from '../api'
 
 export default {
   computed: {

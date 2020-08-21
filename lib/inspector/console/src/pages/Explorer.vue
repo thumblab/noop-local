@@ -134,7 +134,7 @@
 </template>
 
 <script>
-import { request } from '@/api'
+import { request } from '../api'
 import Typeahead from 'vue-bootstrap-typeahead'
 import Vue from 'vue'
 import querystring from 'querystring'

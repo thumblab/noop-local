@@ -61,9 +61,7 @@ notes.md
 cache/
 
 # console ignore
-
 lib/inspector/console/.DS_Store
-lib/inspector/console/dist
 lib/inspector/console/notes
 
 # local env files
