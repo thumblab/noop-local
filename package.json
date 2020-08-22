@@ -7,21 +7,26 @@
   "description": "Noop Local Development Server",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/rearc/noop-local.git"
+    "url": "git+https://github.com/noop-cloud/noop-local.git"
   },
   "keywords": [
-    "noop"
+    "noop",
+    "noop-local",
+    "noop-cloud",
+    "noopfile",
+    "rearc"
   ],
   "author": "Chloe Wintzer",
   "license": "GPL",
   "bugs": {
-    "url": "https://github.com/rearc/noop-local/issues"
+    "url": "https://github.com/noop-cloud/noop-local/issues"
   },
   "scripts": {
     "install-console": "npm install --prefix lib/inspector/console",
-    "build-console": "npm run build --prefix lib/inspector/console"
+    "update-console": "npm update --prefix lib/inspector/console",
+    "build-console": "NODE_ENV=production npm run build --prefix lib/inspector/console"
   },
-  "homepage": "https://github.com/rearc/noop-local#readme",
+  "homepage": "https://github.com/noop-cloud/noop-local#readme",
   "dependencies": {
     "async": "^2.6.1",
     "chalk": "^2.4.1",

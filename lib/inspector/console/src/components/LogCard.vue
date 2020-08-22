@@ -72,8 +72,8 @@ export default {
           return console.error('WS msg parse error', err)
         }
         payload = payload.map((log) => {
-          log.id = new Buffer(log.time+log.data).toString('hex').substring(0, 64)
-          log.time = new moment(log.time)
+          log.id = Buffer.from(log.time + log.data).toString('hex').substring(0, 64)
+          log.time = moment(log.time)
           if (/^\{.+\}$/.test(log.data)) {
             try {
               log.json = JSON.parse(log.data)
@@ -87,8 +87,7 @@ export default {
           return a.time > b.time
         })
         setTimeout(() => {
-          if (this.$refs.scroller)
-          this.$refs.scroller.scrollTop = this.$refs.scroller.scrollHeight
+          if (this.$refs.scroller) { this.$refs.scroller.scrollTop = this.$refs.scroller.scrollHeight }
         }, 50)
       }
     }

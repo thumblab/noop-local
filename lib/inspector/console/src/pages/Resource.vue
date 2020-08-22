@@ -74,9 +74,9 @@ export default {
       return resource
     },
     examples (state) {
-      if (!this.resource) return {}
-      switch (this.resource.type) {
-        case 'dynamodb':
+      if (this.resource) {
+        if (this.resource.type === 'dynamodb') {
+          console.log(this.resource)
           let noopfileParamsString = `-p hashKeyName=${this.resource.parameters.hashKeyName} -p hashKeyType=${this.resource.parameters.hashKeyType}`
           if (this.resource.parameters.rangeKeyName) noopfileParamsString += ` -p rangeKeyName=${this.resource.parameters.rangeKeyName} -p rangeKeyType=${this.resource.parameters.rangeKeyType}`
           return [
@@ -97,7 +97,8 @@ export default {
               '})'
             }
           ]
-        case 'mongodb':
+        }
+        if (this.resource.type === 'mongodb') {
           return [
             {
               name: 'Noopfile',
@@ -105,7 +106,8 @@ export default {
                 `ENV MONGO_URI $.resources.${this.resource.id}.uri`
             }
           ]
-        case 'mysql':
+        }
+        if (this.resource.type === 'mysql') {
           return [
             {
               name: 'Noopfile',
@@ -116,7 +118,8 @@ export default {
                 `ENV DATABASE $.resources.${this.resource.id}.database`
             }
           ]
-        case 'postgresql':
+        }
+        if (this.resource.type === 'postgresql') {
           return [
             {
               name: 'Noopfile',
@@ -124,7 +127,9 @@ export default {
                 `ENV DATABASE_URL $.resources.${this.resource.id}.url`
             }
           ]
+        }
       }
+      return {}
     }
   },
   methods: {

@@ -31,18 +31,18 @@ export default {
   },
   destroyed () {
     this.ws.close()
-    window.removeEventListener('resize', this.handleResize);
+    window.removeEventListener('resize', this.handleResize)
   },
   methods: {
     connect () {
       if (this.terminal) this.terminal.destroy()
-      this.terminal = new Terminal({rows: 16})
+      this.terminal = new Terminal({ rows: 16 })
       this.fitAddOn = new FitAddon()
       this.terminal.loadAddon(this.fitAddOn)
       const element = this.$refs.terminal
       this.terminal.open(element)
       this.terminal.onData((data) => {
-        const payload = new Buffer(data).toString('base64')
+        const payload = Buffer.from(data).toString('base64')
         this.ws.send(JSON.stringify({ d: payload }))
       })
       const url = `${baseUrl}/components/${this.$route.params.componentId}/terminal`.replace('http:', 'ws:')
@@ -66,7 +66,7 @@ export default {
         } catch (err) {
           return console.error('WS msg parse error', err)
         }
-        this.terminal.write(new Buffer(payload.d, 'base64').toString())
+        this.terminal.write(Buffer.from(payload.d, 'base64').toString())
       }
     },
     handleResize () {
@@ -76,7 +76,7 @@ export default {
       if (w === this.width && h === this.height) return null
       this.width = w
       this.height = h
-      this.ws.send(JSON.stringify({w, h}))
+      this.ws.send(JSON.stringify({ w, h }))
     }
   },
   mounted () {

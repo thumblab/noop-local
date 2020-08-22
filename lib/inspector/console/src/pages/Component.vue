@@ -87,7 +87,7 @@
               <b-button block href="#" v-b-toggle.executions variant="primary">Task Executions</b-button>
             </b-card-header>
             <b-collapse id="executions" role="tabpanel">
-              
+
             </b-collapse>
           </b-card>
 
@@ -120,8 +120,8 @@ export default {
     component (state) {
       const component = state.$store.getters['components/byId'](this.$route.params.componentId) || {}
       if (component.build && component.build.end) {
-        const start = new moment(component.build.start)
-        const end = new moment(component.build.end)
+        const start = moment(component.build.start)
+        const end = moment(component.build.end)
         component.build.duration = moment.duration(end.diff(start), 'milliseconds').humanize()
       }
       return component
