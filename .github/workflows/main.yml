@@ -20,6 +20,6 @@ jobs:
           node-version: '12'
       - run: npm run install-console
       - run: npm run build-console
-      - run: npm publish
+      - run: npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.npm_token }}
