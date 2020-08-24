@@ -32,10 +32,10 @@
                 </li>
               </ul>
             </b-list-group-item>
-            <b-list-group-item v-if="resource.parameters">
-              <strong>Parameters</strong>
-              <div v-for="(value, param) in resource.parameters" v-bind:key="param">
-                {{param}} <span class="float-right">{{value}}</span>
+            <b-list-group-item v-if="resource.settings">
+              <strong>Settings</strong>
+              <div v-for="(value, setting) in resource.settings" v-bind:key="setting">
+                {{setting}} <span class="float-right">{{value}}</span>
               </div>
             </b-list-group-item>
           </b-list-group>
@@ -76,13 +76,12 @@ export default {
     examples (state) {
       if (this.resource) {
         if (this.resource.type === 'dynamodb') {
-          console.log(this.resource)
-          let noopfileParamsString = `-p hashKeyName=${this.resource.parameters.hashKeyName} -p hashKeyType=${this.resource.parameters.hashKeyType}`
-          if (this.resource.parameters.rangeKeyName) noopfileParamsString += ` -p rangeKeyName=${this.resource.parameters.rangeKeyName} -p rangeKeyType=${this.resource.parameters.rangeKeyType}`
+          let noopfileSettingsString = `-p hashKeyName=${this.resource.settings.hashKeyName} -p hashKeyType=${this.resource.settings.hashKeyType}`
+          if (this.resource.settings.rangeKeyName) noopfileSettingsString += ` -p rangeKeyName=${this.resource.settings.rangeKeyName} -p rangeKeyType=${this.resource.settings.rangeKeyType}`
           return [
             {
               name: 'Noopfile',
-              code: `RESOURCE ${this.resource.id} dynamodb ${noopfileParamsString}\n` +
+              code: `RESOURCE ${this.resource.id} dynamodb ${noopfileSettingsString}\n` +
                 `ENV DYNAMO_TABLE $.resources.${this.resource.id}.tableName\n` +
                 `ENV DYNAMO_ENDPOINT $.resources.${this.resource.id}.endpoint`
             },
@@ -142,6 +141,9 @@ export default {
   },
   created () {
     this.refresh()
+  },
+  updated () {
+    console.log(this.resource)
   }
 }
 </script>
