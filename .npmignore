@@ -81,3 +81,5 @@ lib/inspector/console/*.ntvs*
 lib/inspector/console/*.njsproj
 lib/inspector/console/*.sln
 lib/inspector/console/*.sw*
+
+.github/
