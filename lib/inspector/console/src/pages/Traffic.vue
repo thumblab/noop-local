@@ -125,7 +125,7 @@
 <script>
 import prettysize from 'prettysize'
 import contentType from 'content-type'
-import { request } from '@/api'
+import { request } from '../api'
 
 export default {
   computed: {
@@ -180,10 +180,10 @@ export default {
         method: this.request.method,
         path: this.request.path
       }).then((res) => {
-          const requestId = res.data.headers['x-request-id']
-          this.$router.push(`/traffic/${requestId}`)
-          location.reload()
-        })
+        const requestId = res.data.headers['x-request-id']
+        this.$router.push(`/traffic/${requestId}`)
+        location.reload()
+      })
     }
   }
 }

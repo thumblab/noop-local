@@ -24,9 +24,9 @@
             </span>
           </div>
         </div>
-        
+
         <strong>{{key}}</strong><br />{{variable[0].value}}
-        
+
       </b-list-group-item>
     </b-list-group>
   </div>

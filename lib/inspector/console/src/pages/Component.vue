@@ -87,7 +87,7 @@
               <b-button block href="#" v-b-toggle.executions variant="primary">Task Executions</b-button>
             </b-card-header>
             <b-collapse id="executions" role="tabpanel">
-              
+
             </b-collapse>
           </b-card>
 
@@ -102,12 +102,12 @@
 </template>
 
 <script>
-import LogCard from '@/components/LogCard.vue'
-import Variables from '@/components/Variables.vue'
-import TerminalCard from '@/components/TerminalCard.vue'
-import PerformanceBar from '@/components/PerformanceBar.vue'
+import LogCard from '../components/LogCard'
+import Variables from '../components/Variables.vue'
+import TerminalCard from '../components/TerminalCard.vue'
+import PerformanceBar from '../components/PerformanceBar.vue'
 import moment from 'moment'
-import { request } from '@/api'
+import { request } from '../api'
 
 export default {
   components: {
@@ -120,8 +120,8 @@ export default {
     component (state) {
       const component = state.$store.getters['components/byId'](this.$route.params.componentId) || {}
       if (component.build && component.build.end) {
-        const start = new moment(component.build.start)
-        const end = new moment(component.build.end)
+        const start = moment(component.build.start)
+        const end = moment(component.build.end)
         component.build.duration = moment.duration(end.diff(start), 'milliseconds').humanize()
       }
       return component

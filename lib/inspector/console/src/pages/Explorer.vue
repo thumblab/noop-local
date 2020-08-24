@@ -39,15 +39,15 @@
             <b-tab no-body title="Headers">
               <div class="row mt-3 mb-1 mx-1">
                 <div class="col-5">
-                  <Typeahead 
-                      v-model="newHeader.key" 
-                      placeholder="content-type" 
-                      :minMatchingChars="0" 
+                  <Typeahead
+                      v-model="newHeader.key"
+                      placeholder="content-type"
+                      :minMatchingChars="0"
                       ref="newHeaderKeyAutocomplete"
                       :data="headerKeySuggest"/>
                 </div>
                 <div class="col-5">
-                  <Typeahead 
+                  <Typeahead
                       v-model="newHeader.value"
                       placeholder="value"
                       :minMatchingChars="0"
@@ -134,12 +134,12 @@
 </template>
 
 <script>
-import { request } from '@/api'
+import { request } from '../api'
 import Typeahead from 'vue-bootstrap-typeahead'
 import Vue from 'vue'
 import querystring from 'querystring'
 
-const headers =  {
+const headers = {
   'content-type': ['application/json'],
   'cache-control': []
 }
@@ -274,7 +274,7 @@ export default {
       } else {
         this.form.path = `${this.form.path}?${newQueryString}`
       }
-      
+
       this.newQuery.key = ''
       this.newQuery.value = ''
     }

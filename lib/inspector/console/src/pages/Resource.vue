@@ -32,10 +32,10 @@
                 </li>
               </ul>
             </b-list-group-item>
-            <b-list-group-item v-if="resource.parameters">
-              <strong>Parameters</strong>
-              <div v-for="(value, param) in resource.parameters" v-bind:key="param">
-                {{param}} <span class="float-right">{{value}}</span>
+            <b-list-group-item v-if="resource.settings">
+              <strong>Settings</strong>
+              <div v-for="(value, setting) in resource.settings" v-bind:key="setting">
+                {{setting}} <span class="float-right">{{value}}</span>
               </div>
             </b-list-group-item>
           </b-list-group>
@@ -65,7 +65,7 @@
 </template>
 
 <script>
-import { request } from '@/api'
+import { request } from '../api'
 
 export default {
   computed: {
@@ -74,15 +74,14 @@ export default {
       return resource
     },
     examples (state) {
-      if (!this.resource) return {}
-      switch (this.resource.type) {
-        case 'dynamodb':
-          let noopfileParamsString = `-p hashKeyName=${this.resource.parameters.hashKeyName} -p hashKeyType=${this.resource.parameters.hashKeyType}`
-          if (this.resource.parameters.rangeKeyName) noopfileParamsString += ` -p rangeKeyName=${this.resource.parameters.rangeKeyName} -p rangeKeyType=${this.resource.parameters.rangeKeyType}`
+      if (this.resource) {
+        if (this.resource.type === 'dynamodb') {
+          let noopfileSettingsString = `-p hashKeyName=${this.resource.settings.hashKeyName} -p hashKeyType=${this.resource.settings.hashKeyType}`
+          if (this.resource.settings.rangeKeyName) noopfileSettingsString += ` -p rangeKeyName=${this.resource.settings.rangeKeyName} -p rangeKeyType=${this.resource.settings.rangeKeyType}`
           return [
             {
               name: 'Noopfile',
-              code: `RESOURCE ${this.resource.id} dynamodb ${noopfileParamsString}\n` +
+              code: `RESOURCE ${this.resource.id} dynamodb ${noopfileSettingsString}\n` +
                 `ENV DYNAMO_TABLE $.resources.${this.resource.id}.tableName\n` +
                 `ENV DYNAMO_ENDPOINT $.resources.${this.resource.id}.endpoint`
             },
@@ -97,7 +96,8 @@ export default {
               '})'
             }
           ]
-        case 'mongodb':
+        }
+        if (this.resource.type === 'mongodb') {
           return [
             {
               name: 'Noopfile',
@@ -105,7 +105,8 @@ export default {
                 `ENV MONGO_URI $.resources.${this.resource.id}.uri`
             }
           ]
-        case 'mysql':
+        }
+        if (this.resource.type === 'mysql') {
           return [
             {
               name: 'Noopfile',
@@ -116,7 +117,8 @@ export default {
                 `ENV DATABASE $.resources.${this.resource.id}.database`
             }
           ]
-        case 'postgresql':
+        }
+        if (this.resource.type === 'postgresql') {
           return [
             {
               name: 'Noopfile',
@@ -124,7 +126,9 @@ export default {
                 `ENV DATABASE_URL $.resources.${this.resource.id}.url`
             }
           ]
+        }
       }
+      return {}
     }
   },
   methods: {
@@ -137,6 +141,9 @@ export default {
   },
   created () {
     this.refresh()
+  },
+  updated () {
+    console.log(this.resource)
   }
 }
 </script>

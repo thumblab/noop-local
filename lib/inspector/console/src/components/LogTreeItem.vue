@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import LogTree from '@/components/LogTree.vue'
+import LogTree from './LogTree'
 
 export default {
   props: ['log'],

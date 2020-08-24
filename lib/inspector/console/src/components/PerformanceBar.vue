@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import { baseUrl } from '@/api'
+import { baseUrl } from '../api'
 import prettysize from 'prettysize'
 
 export default {

@@ -12,14 +12,14 @@
 
 <script>
 import { Terminal } from 'xterm'
-import * as fit from 'xterm/lib/addons/fit/fit'
-import { baseUrl } from '@/api'
-Terminal.applyAddon(fit)
+import { FitAddon } from 'xterm-addon-fit'
+import { baseUrl } from '../api'
 
 export default {
   data () {
     return {
       terminal: null,
+      fitAddOn: null,
       ws: null,
       connected: false,
       height: 0,
@@ -31,16 +31,18 @@ export default {
   },
   destroyed () {
     this.ws.close()
-    window.removeEventListener('resize', this.handleResize);
+    window.removeEventListener('resize', this.handleResize)
   },
   methods: {
     connect () {
       if (this.terminal) this.terminal.destroy()
-      this.terminal = new Terminal({rows: 16})
+      this.terminal = new Terminal({ rows: 16 })
+      this.fitAddOn = new FitAddon()
+      this.terminal.loadAddon(this.fitAddOn)
       const element = this.$refs.terminal
       this.terminal.open(element)
-      this.terminal.on('data', (data) => {
-        const payload = new Buffer(data).toString('base64')
+      this.terminal.onData((data) => {
+        const payload = Buffer.from(data).toString('base64')
         this.ws.send(JSON.stringify({ d: payload }))
       })
       const url = `${baseUrl}/components/${this.$route.params.componentId}/terminal`.replace('http:', 'ws:')
@@ -64,17 +66,17 @@ export default {
         } catch (err) {
           return console.error('WS msg parse error', err)
         }
-        this.terminal.write(new Buffer(payload.d, 'base64').toString())
+        this.terminal.write(Buffer.from(payload.d, 'base64').toString())
       }
     },
     handleResize () {
-      this.terminal.fit()
+      this.fitAddOn.fit()
       const w = this.terminal.cols
       const h = this.terminal.rows
       if (w === this.width && h === this.height) return null
       this.width = w
       this.height = h
-      this.ws.send(JSON.stringify({w, h}))
+      this.ws.send(JSON.stringify({ w, h }))
     }
   },
   mounted () {

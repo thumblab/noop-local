@@ -1,9 +1,0 @@
-COMPONENT ui
-ROUTE -m GET *
-FROM node:alpine
-WORKDIR /ui
-COPY package.json package.json
-RUN npm install
-COPY ./ ./
-RUN npm run build
-STATIC /ui/dist
