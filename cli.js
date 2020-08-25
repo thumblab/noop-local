@@ -30,7 +30,7 @@ cli.command('reset [resourceName]', 'reset resource state', (yargs) => {
 cli.command('route [method] [path]', 'evaluate routing of a specific request', (yargs) => {
   yargs.positional('method', {
     describe: 'HTTP method for evaluation (GET, PUT, POST, DELETE)'
-  }),
+  })
   yargs.positional('path', {
     describe: 'HTTP path for evaluation like /foo/bar'
   })
