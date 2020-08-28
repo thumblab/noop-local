@@ -25,7 +25,8 @@
     "postversion": "git push && git push --tags",
     "install-console": "npm install --prefix lib/inspector/console",
     "update-console": "npm update --prefix lib/inspector/console",
-    "build-console": "NODE_ENV=production npm run build --prefix lib/inspector/console"
+    "build-console": "NODE_ENV=production npm run build --prefix lib/inspector/console",
+    "ci-console": "npm ci --prefix lib/inspector/console"
   },
   "homepage": "https://github.com/noop-cloud/noop-local#readme",
   "dependencies": {
