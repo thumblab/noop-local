@@ -38,7 +38,6 @@
     "dockerode": "^2.5.7",
     "express": "^4.16.4",
     "express-ws": "^4.0.0",
-    "filewatcher": "^3.0.1",
     "git-root-dir": "^1.0.2",
     "hash-stream": "^1.2.0",
     "jsonpath": "^1.0.2",
