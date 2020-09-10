@@ -4,7 +4,7 @@
     "noop": "./cli.js"
   },
   "version": "1.0.27",
-  "description": "Noop Local Development Server",
+  "description": "Noop Local Development Environment",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/noop-cloud/noop-local.git"
