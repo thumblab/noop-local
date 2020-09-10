@@ -3,7 +3,7 @@
   "bin": {
     "noop": "./cli.js"
   },
-  "version": "1.0.26",
+  "version": "1.0.27",
   "description": "Noop Local Development Server",
   "repository": {
     "type": "git",
