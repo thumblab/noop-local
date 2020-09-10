@@ -3,8 +3,8 @@ const cors = require('cors')
 const express = require('express')
 const Events = require('events')
 const http = require('http')
-const crypto = require('crypto')
-const fs = require('fs')
+// const crypto = require('crypto')
+// const fs = require('fs')
 
 let requestCount = 0
 
@@ -19,7 +19,7 @@ class Proxy extends Events.EventEmitter {
   }
 
   init () {
-    if (process.env.CORS === 'true' ) this.app.use(cors())
+    if (process.env.CORS === 'true') this.app.use(cors())
     this.routes.filter((route) => {
       if (this.internal) return true
       if (route.internal) return false
@@ -38,7 +38,7 @@ class Proxy extends Events.EventEmitter {
           '->',
           route.componentName
         )
-        if (clientRequest.secure) { 
+        if (clientRequest.secure) {
           clientRequest.headers['X-forwarded-proto'] = 'https'
         }
         this.emit('request', {
@@ -76,7 +76,7 @@ class Proxy extends Events.EventEmitter {
             clientResponse.size += chunk.length
             clientResponse.write(chunk)
             clientResponse.body += chunk
-            this.emit('request', {id: clientRequest.requestCount, responseSize: clientResponse.size})
+            this.emit('request', { id: clientRequest.requestCount, responseSize: clientResponse.size })
           })
           serverResponse.on('end', () => {
             logResponse()
@@ -90,7 +90,7 @@ class Proxy extends Events.EventEmitter {
         })
         serverRequest.on('error', (err) => {
           clientResponse.statusCode = 500
-          clientResponse.statusMessage = `NoopRouterError`
+          clientResponse.statusMessage = 'NoopRouterError'
           clientResponse.write(`Noop router error: ${err.code}`)
           logResponse()
           clientResponse.end()
@@ -99,11 +99,11 @@ class Proxy extends Events.EventEmitter {
           clientRequest.size += chunk.length
           clientRequest.body += chunk
           serverRequest.write(chunk)
-          this.emit('request', {id: clientRequest.requestCount, requestSize: clientRequest.size})
+          this.emit('request', { id: clientRequest.requestCount, requestSize: clientRequest.size })
         })
         clientRequest.on('end', () => {
           serverRequest.end()
-          this.emit('request', {id: clientRequest.requestCount, requestBody: clientRequest.body})
+          this.emit('request', { id: clientRequest.requestCount, requestBody: clientRequest.body })
         })
         function logResponse () {
           const duration = (new Date().getTime() - startTime) + 'ms'

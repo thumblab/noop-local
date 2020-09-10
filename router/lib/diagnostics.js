@@ -43,7 +43,7 @@ class DiagnosticsInterface {
       headers: req.body.headers || {},
       method: req.body.method || 'GET'
     }
-    if (req.body.body) diagRequestOpts.body = new Buffer(JSON.stringify(req.body.body), 'base64')
+    if (req.body.body) diagRequestOpts.body = Buffer.from(JSON.stringify(req.body.body), 'base64')
     request(diagRequestOpts, (err, diagResponse, body) => {
       if (err) {
         res.json({
@@ -53,7 +53,7 @@ class DiagnosticsInterface {
           body: null
         })
       } else {
-        if (typeof body === 'string') body = new Buffer(body).toString('base64')
+        if (typeof body === 'string') body = Buffer.from(body).toString('base64')
         res.json({
           headers: diagResponse.headers,
           statusCode: diagResponse.statusCode,

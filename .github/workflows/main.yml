@@ -19,7 +19,7 @@ jobs:
         with:
           node-version: '12'
           registry-url: 'https://registry.npmjs.org'
-      - run: npm run install-console
+      - run: npm run ci-console
       - run: npm run build-console
       - run: npm publish
         env:

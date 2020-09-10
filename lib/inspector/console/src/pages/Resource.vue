@@ -141,9 +141,6 @@ export default {
   },
   created () {
     this.refresh()
-  },
-  updated () {
-    console.log(this.resource)
   }
 }
 </script>
