@@ -1,6 +1,6 @@
 FROM node:12-alpine
 WORKDIR /opt/static
-COPY package.json package.json
-RUN npm install
+COPY package*.json ./
+RUN npm ci
 COPY server.js server.js
 CMD node server.js
