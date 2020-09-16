@@ -41,7 +41,7 @@
     "jsonpath": "^1.0.2",
     "mkdirp": "^0.5.1",
     "moment": "^2.22.2",
-    "noop-discovery": "^1.3.12",
+    "noop-discovery": "^1.3.13",
     "path-to-regexp": "^2.4.0",
     "request": "^2.88.0",
     "rimraf": "^2.6.2",
