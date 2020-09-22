@@ -5,6 +5,7 @@ const Events = require('events')
 const http = require('http')
 // const crypto = require('crypto')
 // const fs = require('fs')
+const zlib = require('zlib')
 
 let requestCount = 0
 
@@ -72,13 +73,14 @@ class Proxy extends Events.EventEmitter {
             statusCode: serverResponse.statusCode,
             statusMessage: serverResponse.statusMessage
           })
-          serverResponse.on('data', (chunk) => {
-            clientResponse.size += chunk.length
-            clientResponse.write(chunk)
-            clientResponse.body += chunk
-            this.emit('request', { id: clientRequest.requestCount, responseSize: clientResponse.size })
-          })
-          serverResponse.on('end', () => {
+          const gunzip = zlib.createGunzip()
+          if (serverResponse.headers['content-encoding'] === 'gzip') {
+            gunzip.on('data', (chunk) => {
+              clientResponse.body += chunk
+              this.emit('request', { id: clientRequest.requestCount, responseSize: clientResponse.size })
+            })
+          }
+          gunzip.on('end', (chunk) => {
             logResponse()
             clientResponse.end()
             this.emit('request', {
@@ -86,6 +88,29 @@ class Proxy extends Events.EventEmitter {
               responseBody: clientResponse.body,
               responseTime: new Date()
             })
+          })
+          serverResponse.on('data', (chunk) => {
+            clientResponse.size += chunk.length
+            clientResponse.write(chunk)
+            if (serverResponse.headers['content-encoding'] === 'gzip') {
+              gunzip.write(chunk)
+            } else {
+              clientResponse.body += chunk
+              this.emit('request', { id: clientRequest.requestCount, responseSize: clientResponse.size })
+            }
+          })
+          serverResponse.on('end', () => {
+            if (serverResponse.headers['content-encoding'] === 'gzip') {
+              gunzip.end()
+            } else {
+              logResponse()
+              clientResponse.end()
+              this.emit('request', {
+                id: clientRequest.requestCount,
+                responseBody: clientResponse.body,
+                responseTime: new Date()
+              })
+            }
           })
         })
         serverRequest.on('error', (err) => {
