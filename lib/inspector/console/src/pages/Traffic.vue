@@ -196,6 +196,7 @@ header {
 
 pre {
   margin-bottom: 0;
+  white-space: pre-wrap;
 }
 
 #accordion header > a {
