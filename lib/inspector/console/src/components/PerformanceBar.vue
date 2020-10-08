@@ -3,9 +3,12 @@
     <b-button variant="dark" >
       CPU <b-badge>{{perf.cpu_percent}}%</b-badge>
     </b-button>
-    <b-button variant="dark">
-      Memory <b-badge>{{perf.memory_percent}}%</b-badge>
-    </b-button>
+    <b-dropdown variant="dark" no-caret>
+      <template v-slot:button-content>Memory <b-badge>{{perf.memory_percent}}%</b-badge></template>
+      <b-dropdown-item>Usage {{perf.memory_usage}}</b-dropdown-item>
+      <b-dropdown-item>Limit {{perf.memory_limit}}</b-dropdown-item>
+      <b-dropdown-item>Max {{perf.memory_max}}</b-dropdown-item>
+    </b-dropdown>
     <b-button variant="dark">
       Network <b-badge>{{perf.networkRx}}/s in</b-badge>&nbsp;<b-badge>{{perf.networkTx}}/s out</b-badge>
     </b-button>
@@ -62,6 +65,9 @@ export default {
 
         // memory
         payload.memory_percent = Math.ceil((payload.memory_stats.usage / payload.memory_stats.limit) * 1000) / 10
+        payload.memory_usage = prettysize(payload.memory_stats.usage)
+        payload.memory_limit = prettysize(payload.memory_stats.limit)
+        payload.memory_max = prettysize(payload.memory_stats.max_usage)
 
         // network
         let networkRx = 0
