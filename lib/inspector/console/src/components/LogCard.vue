@@ -3,7 +3,7 @@
     <template slot="header">
       Logs <b-badge variant="success">live</b-badge>
       <div class="float-right">
-        <b-form inline>
+        <b-form inline v-on:submit.prevent>
           <b-form-checkbox v-model="simple" size="sm">Simple View</b-form-checkbox>
           <b-form-input class="ml-2" size="sm" id="filter" v-model="filter" placeholder="filter" />
         </b-form>
