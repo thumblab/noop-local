@@ -10,12 +10,12 @@
       </div>
     </template>
     <div v-if="simple" class="simple">
-      <div v-for="log in logs" v-bind:key="log.id" :title="log.time.format('hh:mm:ss.SSS')">
+      <div v-for="log in filteredLogs" v-bind:key="log.id" :title="log.time.format('hh:mm:ss.SSS')">
         {{log.data}}
       </div>
     </div>
     <b-list-group v-else flush class="scroll fullwidth" ref="scroller">
-      <b-list-group-item v-for="log in logs" v-bind:key="log.id">
+      <b-list-group-item v-for="log in filteredLogs" v-bind:key="log.id">
         <div v-if="log.json">
           <LogTreeItem :log="log" />
         </div>
@@ -44,6 +44,12 @@ export default {
       ws: null,
       simple: false,
       filter: ''
+    }
+  },
+  computed: {
+    filteredLogs () {
+      const filter = (logs, filter) => logs.filter(log => !!log.json || log.data.includes(filter))
+      return filter(this.logs, this.filter)
     }
   },
   created () {
