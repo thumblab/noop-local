@@ -48,7 +48,7 @@ export default {
   },
   computed: {
     filteredLogs () {
-      const filter = (logs, filter) => logs.filter(log => !!log.json || log.data.includes(filter))
+      const filter = (logs, filter) => logs.filter(log => !!log.json || log.data.toLowerCase().includes(filter.toLowerCase()))
       return filter(this.logs, this.filter)
     }
   },
