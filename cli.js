@@ -12,29 +12,34 @@ const argv = require('yargs')
   .scriptName('noop')
   .usage('Usage:\n  $0 <command> [options]')
   .help('help').alias('help', 'h')
-  .version('version', version).alias('version', 'V')
-  .command('run [componentNames...]', 'Run local dev server', (yargs) => {
+  .version('version', version).alias('version', 'v')
+  .command('run [port]', 'Run local dev server', (yargs) => {
     yargs
-      .positional('componentNames', {
-        describe: 'Names of components to run',
-        type: 'string'
+      .positional('port', {
+        describe: 'Port bind local dev server',
+        type: 'number',
+        default: 1234
       })
       .options({
-        port: {
-          alias: 'p',
-          type: 'number',
-          description: 'Port bind local dev server',
-          default: 1234
-        },
-        autoReload: {
-          alias: 'a',
+        'disable-reload': {
+          alias: 'd',
           type: 'boolean',
-          description: 'Enable auto-reload for dev server'
+          description: 'Disable auto-reload for dev server'
         },
-        env: {
+        envs: {
           alias: 'e',
           type: 'array',
           description: 'Runtime environment variables override'
+        },
+        'env-files': {
+          alias: 'f',
+          type: 'array',
+          description: 'Specify paths to environment variable files'
+        },
+        components: {
+          alias: 'c',
+          type: 'array',
+          description: 'Name of components to run'
         },
         resourceNames: {
           alias: 'r',
@@ -45,18 +50,18 @@ const argv = require('yargs')
   }, (argv) => {
     runCommand(argv)
   })
-  .command('inspect [inspectTypes...]', 'Inspect noop app', (yargs) => {
+  .command('inspect [types...]', 'Inspect noop app', (yargs) => {
     yargs
-      .positional('inspectTypes', {
+      .positional('types', {
         describe: 'Type to inspect (noopfiles, components, resources, routes)',
         type: 'array'
       })
   }, (argv) => {
     inspectCommand(argv)
   })
-  .command('reset [resourceNames...]', 'Reset resource state', (yargs) => {
+  .command('reset [resources...]', 'Reset resource state', (yargs) => {
     yargs
-      .positional('resourceNames', {
+      .positional('resources', {
         describe: 'Names of resources to reset',
         type: 'array',
         demandOption: 'true'
@@ -68,18 +73,19 @@ const argv = require('yargs')
     yargs
       .positional('method', {
         describe: 'HTTP method for evaluation (GET, PUT, POST, DELETE)',
-        type: 'string'
+        type: 'string',
+        demandOption: 'true'
       })
       .positional('path', {
         describe: 'HTTP path for evaluation like /foo/bar',
-        type: 'string'
+        type: 'string',
+        demandOption: 'true'
       })
   }, (arvg) => {
     routeCommand(arvg)
   })
   .options({
     verbose: {
-      alias: 'v',
       type: 'boolean',
       description: 'Run with verbose logging'
     }
@@ -89,8 +95,10 @@ const argv = require('yargs')
 if (!argv._.length) console.log(`noop-local v${version}`)
 if (argv.verbose || process.env.DEBUG === 'true') console.log(argv)
 
-// cli.command('connect [resourceId]', 'connect to platform managed resource', (yargs) => {
+// .command('connect [resourceId]', 'connect to platform managed resource', (yargs) => {
 //   yargs.positional('resourceId', {
 //     describe: 'ID of the resources you\'d like to directly connect to'
 //   })
-// }, connectCommand)
+// }, (argv) => {
+//   connectCommand(argv)
+// })
