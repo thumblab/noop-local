@@ -1,10 +1,7 @@
 const https = require('https')
-const cors = require('cors')
 const express = require('express')
 const Events = require('events')
 const http = require('http')
-// const crypto = require('crypto')
-// const fs = require('fs')
 const zlib = require('zlib')
 
 let requestCount = 0
@@ -20,7 +17,6 @@ class Proxy extends Events.EventEmitter {
   }
 
   init () {
-    if (process.env.CORS === 'true') this.app.use(cors())
     this.routes.filter((route) => {
       if (this.internal) return true
       if (route.internal) return false
