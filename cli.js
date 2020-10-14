@@ -26,22 +26,22 @@ const argv = require('yargs')
           description: 'Disable auto-reload for dev server',
           default: false
         },
-        envs: {
+        env: {
           alias: 'e',
           type: 'array',
-          description: 'Runtime environment variables override'
+          description: 'Runtime environment variables'
         },
-        'env-files': {
+        'env-file': {
           alias: 'f',
           type: 'array',
           description: 'Specify paths to environment variable files'
         },
-        components: {
+        component: {
           alias: 'c',
           type: 'array',
           description: 'Name of components to run'
         },
-        resources: {
+        resource: {
           alias: 'r',
           type: 'array',
           description: 'Name of resources to run'
@@ -50,18 +50,18 @@ const argv = require('yargs')
   }, (argv) => {
     runCommand(argv)
   })
-  .command('inspect [types...]', 'Inspect noop app', (yargs) => {
+  .command('inspect [type...]', 'Inspect noop app', (yargs) => {
     yargs
-      .positional('types', {
+      .positional('type', {
         describe: 'Type to inspect (noopfiles, components, resources, routes)',
         type: 'array'
       })
   }, (argv) => {
     inspectCommand(argv)
   })
-  .command('reset [resources...]', 'Reset state of resources', (yargs) => {
+  .command('reset [resource...]', 'Reset state of resources', (yargs) => {
     yargs
-      .positional('resources', {
+      .positional('resource', {
         describe: 'Names of resources to reset',
         type: 'array',
         demandOption: 'true'
@@ -72,7 +72,7 @@ const argv = require('yargs')
   .command('route [method] [path]', 'Evaluate routing of a specific request', (yargs) => {
     yargs
       .positional('method', {
-        describe: 'HTTP method for evaluation (GET, PUT, POST, DELETE, ALL, OPTIONS)',
+        describe: 'HTTP method for evaluation (GET, PUT, POST, DELETE, OPTIONS)',
         type: 'string'
       })
       .positional('path', {
@@ -83,6 +83,11 @@ const argv = require('yargs')
     routeCommand(arvg)
   })
   .options({
+    'root-path': {
+      type: 'string',
+      description: 'Specify root path of app as relative path to current working directory',
+      alias: 'R'
+    },
     verbose: {
       type: 'boolean',
       description: 'Run with verbose logging',
