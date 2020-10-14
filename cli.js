@@ -29,22 +29,22 @@ const argv = yargs
         env: {
           alias: 'e',
           type: 'array',
-          description: 'Runtime environment variables'
+          description: 'Runtime environment variable(s)'
         },
         'env-file': {
           alias: 'f',
           type: 'array',
-          description: 'Specify paths to environment variable files'
+          description: 'Specify paths to environment variable file(s)'
         },
         component: {
           alias: 'c',
           type: 'array',
-          description: 'Name of components to run'
+          description: 'Name of component(s) to run'
         },
         resource: {
           alias: 'r',
           type: 'array',
-          description: 'Name of resources to run'
+          description: 'Name of resource(s) to run'
         }
       })
   }, (argv) => {
@@ -53,12 +53,12 @@ const argv = yargs
   .command('inspect [type..]', 'Inspect Noop app', (yargs) => {
     yargs
       .positional('type', {
-        describe: 'Type to inspect (noopfiles, components, resources, routes)'
+        describe: 'Type(s) to inspect (noopfiles, components, resources, routes)'
       })
   }, (argv) => {
     inspectCommand(argv)
   })
-  .command('reset [resource..]', 'Reset state of resources', (yargs) => {
+  .command('reset [resource..]', 'Reset state of resource', (yargs) => {
     yargs
       .positional('resource', {
         describe: 'Name of resource(s) to reset'
