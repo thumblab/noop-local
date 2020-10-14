@@ -83,3 +83,5 @@ lib/inspector/console/*.sln
 lib/inspector/console/*.sw*
 
 .github/
+
+.DS_Store

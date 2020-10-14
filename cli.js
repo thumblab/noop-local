@@ -1,46 +1,110 @@
 #!/usr/bin/env node
-process.title = 'noop'
-const cli = require('yargs')
-const debug = (process.env.DEBUG === 'true')
-const version = require('./package.json').version
+
+const yargs = require('yargs')
 
 const runCommand = require('./lib/commands/run')
 const inspectCommand = require('./lib/commands/inspect')
 const resetCommand = require('./lib/commands/reset')
 const routeCommand = require('./lib/commands/route')
-const connectCommand = require('./lib/commands/connect')
+// const connectCommand = require('./lib/commands/connect')
 
-console.log(`noop-local v${version}`)
-
-cli.command('run [port]', 'run local dev server', (yargs) => {
-  yargs.positional('port', {
-    describe: 'port to bind local dev server',
-    default: 1234
+const argv = yargs
+  .usage('$0 <command> [options]')
+  .help('help').alias('help', 'h')
+  .version('version', `noop-local v${require('./package.json').version}`).alias('version', 'v')
+  .command('run', 'Run local dev server', (yargs) => {
+    yargs
+      .options({
+        port: {
+          alias: 'p',
+          type: 'number',
+          describe: 'Port bind local dev server',
+          default: 1234
+        },
+        'disable-reload': {
+          alias: 'd',
+          type: 'boolean',
+          description: 'Disable auto-reload for dev server'
+        },
+        env: {
+          alias: 'e',
+          type: 'array',
+          description: 'Runtime environment variable(s)'
+        },
+        'env-file': {
+          alias: 'f',
+          type: 'array',
+          description: 'Specify paths to environment variable file(s)'
+        },
+        component: {
+          alias: 'c',
+          type: 'array',
+          description: 'Name of component(s) to run'
+        },
+        resource: {
+          alias: 'r',
+          type: 'array',
+          description: 'Name of resource(s) to run'
+        }
+      })
+  }, (argv) => {
+    runCommand(argv)
   })
-}, runCommand)
-
-cli.command('inspect', 'inspect noop app', inspectCommand)
-
-cli.command('reset [resourceName]', 'reset resource state', (yargs) => {
-  yargs.positional('resourceName', {
-    describe: 'name of resource to reset state'
+  .command('inspect [type..]', 'Inspect Noop app', (yargs) => {
+    yargs
+      .positional('type', {
+        describe: 'Type(s) to inspect (noopfiles, components, resources, routes)'
+      })
+  }, (argv) => {
+    inspectCommand(argv)
   })
-}, resetCommand)
-
-cli.command('route [method] [path]', 'evaluate routing of a specific request', (yargs) => {
-  yargs.positional('method', {
-    describe: 'HTTP method for evaluation (GET, PUT, POST, DELETE)'
+  .command('reset [resource..]', 'Reset state of resource', (yargs) => {
+    yargs
+      .positional('resource', {
+        describe: 'Name of resource(s) to reset'
+      })
+  }, (arvg) => {
+    if (!arvg.resource.length) {
+      yargs.showHelp()
+      console.log('\nMissing required argument: resource\nPlease provide \'resource\' argument when using the reset command')
+    } else {
+      resetCommand(arvg)
+    }
   })
-  yargs.positional('path', {
-    describe: 'HTTP path for evaluation like /foo/bar'
+  .command('route [method] [path]', 'Evaluate routing of a specific request', (yargs) => {
+    yargs
+      .positional('method', {
+        describe: 'HTTP method for evaluation (GET, PUT, POST, DELETE, OPTIONS)',
+        type: 'string'
+      })
+      .positional('path', {
+        describe: 'HTTP path for evaluation like /foo/bar',
+        type: 'string'
+      })
+      .demandOption(['method', 'path'], 'Provide both \'method\' and \'path\' arguments when using the route command')
+  }, (arvg) => {
+    routeCommand(arvg)
   })
-}, routeCommand)
-
-cli.command('connect [resourceId]', 'connect to platform managed resource', (yargs) => {
-  yargs.positional('resourceId', {
-    describe: 'ID of the resources you\'d like to directly connect to'
+  .options({
+    'root-path': {
+      type: 'string',
+      description: 'Specify root path of app, overrides default usage of git root',
+      alias: 'R'
+    },
+    verbose: {
+      type: 'boolean',
+      description: 'Run with verbose logging'
+    }
   })
-}, connectCommand)
+  .demandCommand(1, 'You need at least one command before moving on')
+  .argv
 
-const argv = cli.argv // no idea wtf reading `argv` props does to make it work
-if (debug) console.log(argv)
+if (argv.verbose || process.env.DEBUG === 'true') console.log('CLI arguments:', argv)
+
+// .command('connect [resourceId]', 'connect to platform managed resource', (yargs) => {
+//   yargs.positional('resourceId', {
+//     describe: 'ID of the resources you\'d like to directly connect to'
+//   })
+// }, (argv) => {
+//   connectCommand(argv)
+// })

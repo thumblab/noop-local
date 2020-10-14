@@ -3,19 +3,19 @@
     <template slot="header">
       Logs <b-badge variant="success">live</b-badge>
       <div class="float-right">
-        <b-form inline>
+        <b-form inline v-on:submit.prevent>
           <b-form-checkbox v-model="simple" size="sm">Simple View</b-form-checkbox>
           <b-form-input class="ml-2" size="sm" id="filter" v-model="filter" placeholder="filter" />
         </b-form>
       </div>
     </template>
     <div v-if="simple" class="simple">
-      <div v-for="log in logs" v-bind:key="log.id" :title="log.time.format('hh:mm:ss.SSS')">
+      <div v-for="log in filteredLogs" v-bind:key="log.id" :title="log.time.format('hh:mm:ss.SSS')">
         {{log.data}}
       </div>
     </div>
     <b-list-group v-else flush class="scroll fullwidth" ref="scroller">
-      <b-list-group-item v-for="log in logs" v-bind:key="log.id">
+      <b-list-group-item v-for="log in filteredLogs" v-bind:key="log.id">
         <div v-if="log.json">
           <LogTreeItem :log="log" />
         </div>
@@ -44,6 +44,12 @@ export default {
       ws: null,
       simple: false,
       filter: ''
+    }
+  },
+  computed: {
+    filteredLogs () {
+      const filter = (logs, filter) => logs.filter(log => !!log.json || log.data.toLowerCase().includes(filter.toLowerCase()))
+      return filter(this.logs, this.filter)
     }
   },
   created () {
