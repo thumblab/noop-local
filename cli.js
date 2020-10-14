@@ -1,14 +1,15 @@
 #!/usr/bin/env node
 
+const yargs = require('yargs')
+
 const runCommand = require('./lib/commands/run')
 const inspectCommand = require('./lib/commands/inspect')
 const resetCommand = require('./lib/commands/reset')
 const routeCommand = require('./lib/commands/route')
 // const connectCommand = require('./lib/commands/connect')
 
-const argv = require('yargs')
-  .scriptName('noop')
-  .usage('Usage:\n  $0 <command> [options]')
+const argv = yargs
+  .usage('$0 <command> [options]')
   .help('help').alias('help', 'h')
   .version('version', `noop-local v${require('./package.json').version}`).alias('version', 'v')
   .command('run', 'Run local dev server', (yargs) => {
@@ -23,8 +24,7 @@ const argv = require('yargs')
         'disable-reload': {
           alias: 'd',
           type: 'boolean',
-          description: 'Disable auto-reload for dev server',
-          default: false
+          description: 'Disable auto-reload for dev server'
         },
         env: {
           alias: 'e',
@@ -50,24 +50,26 @@ const argv = require('yargs')
   }, (argv) => {
     runCommand(argv)
   })
-  .command('inspect [type...]', 'Inspect noop app', (yargs) => {
+  .command('inspect [type..]', 'Inspect Noop app', (yargs) => {
     yargs
       .positional('type', {
-        describe: 'Type to inspect (noopfiles, components, resources, routes)',
-        type: 'array'
+        describe: 'Type to inspect (noopfiles, components, resources, routes)'
       })
   }, (argv) => {
     inspectCommand(argv)
   })
-  .command('reset [resource...]', 'Reset state of resources', (yargs) => {
+  .command('reset [resource..]', 'Reset state of resources', (yargs) => {
     yargs
       .positional('resource', {
-        describe: 'Names of resources to reset',
-        type: 'array',
-        demandOption: 'true'
+        describe: 'Name of resource(s) to reset'
       })
   }, (arvg) => {
-    resetCommand(arvg)
+    if (!arvg.resource.length) {
+      yargs.showHelp()
+      console.log('\nMissing required argument: resource\nPlease provide \'resource\' argument when using the reset command')
+    } else {
+      resetCommand(arvg)
+    }
   })
   .command('route [method] [path]', 'Evaluate routing of a specific request', (yargs) => {
     yargs
@@ -79,21 +81,22 @@ const argv = require('yargs')
         describe: 'HTTP path for evaluation like /foo/bar',
         type: 'string'
       })
+      .demandOption(['method', 'path'], 'Provide both \'method\' and \'path\' arguments when using the route command')
   }, (arvg) => {
     routeCommand(arvg)
   })
   .options({
     'root-path': {
       type: 'string',
-      description: 'Specify root path of app as relative path to current working directory',
+      description: 'Specify root path of app, overrides default usage of git root',
       alias: 'R'
     },
     verbose: {
       type: 'boolean',
-      description: 'Run with verbose logging',
-      default: false
+      description: 'Run with verbose logging'
     }
   })
+  .demandCommand(1, 'You need at least one command before moving on')
   .argv
 
 if (argv.verbose || process.env.DEBUG === 'true') console.log('CLI arguments:', argv)
