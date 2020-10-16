@@ -6,9 +6,7 @@ const resetCommand = require('./lib/commands/reset')
 const routeCommand = require('./lib/commands/route')
 // const connectCommand = require('./lib/commands/connect')
 
-const { hideBin } = require('yargs/helpers')
-
-const yargs = require('yargs/yargs')(hideBin(process.argv))
+const yargs = require('yargs')
   .usage('$0 <command> [options]')
   .help('help').alias('help', 'h')
   .version('version', `noop-local v${require('./package.json').version}`).alias('version', 'v')
@@ -100,7 +98,7 @@ const argv = yargs.argv
 
 if (!commands.includes(argv._[0])) {
   yargs.showHelp()
-  console.log(`Unknown command: ${argv._[0]}`)
+  console.log(`\nUnknown command: ${argv._[0]}`)
 }
 
 if (argv.verbose || process.env.DEBUG === 'true') console.log('CLI arguments:', argv)
