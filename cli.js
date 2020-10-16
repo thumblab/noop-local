@@ -1,14 +1,14 @@
 #!/usr/bin/env node
 
-const yargs = require('yargs')
-
 const runCommand = require('./lib/commands/run')
 const inspectCommand = require('./lib/commands/inspect')
 const resetCommand = require('./lib/commands/reset')
 const routeCommand = require('./lib/commands/route')
 // const connectCommand = require('./lib/commands/connect')
 
-const argv = yargs
+const { hideBin } = require('yargs/helpers')
+
+const yargs = require('yargs/yargs')(hideBin(process.argv))
   .usage('$0 <command> [options]')
   .help('help').alias('help', 'h')
   .version('version', `noop-local v${require('./package.json').version}`).alias('version', 'v')
@@ -58,18 +58,14 @@ const argv = yargs
   }, (argv) => {
     inspectCommand(argv)
   })
-  .command('reset [resource..]', 'Reset state of resource', (yargs) => {
+  .command('reset [resource]', 'Reset state of resource', (yargs) => {
     yargs
       .positional('resource', {
         describe: 'Name of resource(s) to reset'
       })
-  }, (arvg) => {
-    if (!arvg.resource.length) {
-      yargs.showHelp()
-      console.log('\nMissing required argument: resource\nPlease provide \'resource\' argument when using the reset command')
-    } else {
-      resetCommand(arvg)
-    }
+      .demandOption(['resource'], 'Provide \'resource\' argument when using the reset command')
+  }, (argv) => {
+    resetCommand(argv)
   })
   .command('route [method] [path]', 'Evaluate routing of a specific request', (yargs) => {
     yargs
@@ -82,8 +78,8 @@ const argv = yargs
         type: 'string'
       })
       .demandOption(['method', 'path'], 'Provide both \'method\' and \'path\' arguments when using the route command')
-  }, (arvg) => {
-    routeCommand(arvg)
+  }, (argv) => {
+    routeCommand(argv)
   })
   .options({
     'root-path': {
@@ -97,7 +93,15 @@ const argv = yargs
     }
   })
   .demandCommand(1, 'You need at least one command before moving on')
-  .argv
+  .strictOptions()
+
+const commands = yargs.getCommandInstance().getCommands()
+const argv = yargs.argv
+
+if (!commands.includes(argv._[0])) {
+  yargs.showHelp()
+  console.log(`Unknown command: ${argv._[0]}`)
+}
 
 if (argv.verbose || process.env.DEBUG === 'true') console.log('CLI arguments:', argv)
 

@@ -3,6 +3,6 @@
     "cors": "^2.8.5",
     "express": "^4.16.3",
     "express-ws": "^4.0.0",
-    "request": "^2.88.2"
+    "node-fetch": "^2.6.1"
   }
 }
