@@ -98,9 +98,9 @@ The state of an application's resources persist between executions of the `run` 
 
 ### Route
 
-**`noop route [method] [path]`**
+**`noop route [path] [method]`**
 
-Evaluate what component a specific request will be routed to based on `ROUTE` directives in an application's Noopfiles. Valid options for `method` include `GET`, `PUT`, `POST`, `DELETE`, and `OPTIONS`. `path` option should match the pattern expected to be included in the HTTP header of a request to the application. E.g: `noop route GET /api/foo/bar`
+Evaluate what component a specific request will be routed to based on `ROUTE` directives in an application's Noopfiles. `path` option should match the pattern expected to be included in the HTTP header of a request to the application. Valid options for `method` include `GET`, `PUT`, `POST`, `DELETE`, and `OPTIONS`. If method is omitted, `GET` will be used by default.
 
 **`-R | --root-path`**
 

@@ -65,17 +65,18 @@ const yargs = require('yargs')
   }, (argv) => {
     resetCommand(argv)
   })
-  .command('route [method] [path]', 'Evaluate routing of a specific request', (yargs) => {
+  .command('route [path] [method]', 'Evaluate routing of a specific request', (yargs) => {
     yargs
-      .positional('method', {
-        describe: 'HTTP method for evaluation (GET, PUT, POST, DELETE, OPTIONS)',
-        type: 'string'
-      })
       .positional('path', {
         describe: 'HTTP path for evaluation like /foo/bar',
         type: 'string'
       })
-      .demandOption(['method', 'path'], 'Provide both \'method\' and \'path\' arguments when using the route command')
+      .positional('method', {
+        describe: 'HTTP method for evaluation (GET, PUT, POST, DELETE, OPTIONS)',
+        type: 'string',
+        default: 'GET'
+      })
+      .demandOption(['path'], 'Provide both \'path\' and \'method\' arguments when using the route command')
   }, (argv) => {
     routeCommand(argv)
   })
