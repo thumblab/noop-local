@@ -2,6 +2,16 @@
 
 Interactive command line interface for local development of Noop applications.
 
+### Table of Contents
+
+- [Prerequisites](#prerequisites)
+- [Package Install](#package-install)
+- [CLI Commands](#cli-commands)
+  - [Run](#run)
+  - [Inspect](#inspect)
+  - [Reset](#reset)
+  - [Route](#route)
+
 ## Prerequisites
 
 - [Node.js](https://nodejs.org/en/) - v10 or later, active LTS release recommended
@@ -13,7 +23,7 @@ Interactive command line interface for local development of Noop applications.
 
 `npm install -g noop-local`
 
-## Commands
+## CLI Commands
 
 ### Run
 
@@ -86,7 +96,7 @@ The state of an application's resources persist between executions of the `run` 
 
 - Same functionality as `--root-path` flag's usage with `run` command
 
-### Reset
+### Route
 
 **`noop route [method] [path]`**
 
