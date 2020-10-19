@@ -1,52 +1,97 @@
-Noop Local
-========
-Interactive command line interface for local development of noop apps.
+# Noop Local
 
-## Requirements
-- node
-- git
-- docker
+Interactive command line interface for local development of Noop applications.
+
+## Prerequisites
+
+- [Node.js](https://nodejs.org/en/) - v10 or later, active LTS release recommended
+- [Git](https://git-scm.com/)
+- [Docker](docker.com)
+- A Unix Shell (sh, bash, zsh, etc.) such as those utilized by macOS, Linux, Windows WSL or other Unix-based platforms
 
 ## Package Install
+
 `npm install -g noop-local`
 
-## Local Install
-```
-git clone git@github.com:rearc/noop-local.git
-cd noop-local
-npm install
-npm link
-```
-
 ## Commands
-#### Run the app in local development mode which auto reloads
-`noop run [port] [-e componentname.ENV_KEY=Value] [--envFile .devEnv] [-e ENV_KEY=Value]`
 
-If a `.noopEnv` file exists in the root of the application, it will automatically be read.
+### Run
 
-#### Analyze current project directory and display summary information
-`noop inspect`
+**`noop run [--root-path path/to/root] [--port 1234] [--disable-reload] [--env ENV_KEY=value componentName.ENV_KEY=value] [--env-file .envFile] [--component componentName] [--resource resourceName]`**
 
-#### Reset state of a resource
-Resources run through the Noop Dev Server persist state between runs. To clear this state run:
-`noop reset <resourceName>` Example if your db resource state is corrupted because a bad version of the database was installed initially).
+Run a Noop application on a local development server with auto-reloading when file changes are detected. If a `.noopEnv` file exists at the root-level of an application, it will automatically be read.
 
-#### Initialize a new project
-`noop init` (not implemented)
+**`-R | --root-path`**
 
-Auto-detect what we can from the repo and then interact with user to provide additional detail.
+- Specify root path of an application
+- Can be an absolute path or relative path to your current working directory
+- If the `--root-path` flag is present, but a specified path is omitted, the root path will be assigned to current working directory
+- **Default:** Git root of current directory
 
-#### Create new a component
-`noop add component --type service --template nodejs --name ProductSite` (not implemented)
+**`-p | --port`**
 
-Parameters
-- name? (do components have names?)
-- type (service, function, persistent?, static)
-- template
+- Reassign the port binding for the local development server
+- **Default:** 1234
 
-#### Create a new resource for the current component
-`noop add resource --type mysql --name products` (not implemented)
+**`-d | --disable-reload`**
 
-Parameters
-- name
-- type (mysql, dynamodb, s3)
+- Disable auto-reload of on file changes
+- **Default:** false
+
+**`-e | --env`**
+
+- Declares runtime environment variable(s)
+- Syntax for global environment variable, `ENV_KEY=value`
+- Syntax for component specific variables, `componentName.ENV_KEY=value`
+- Declaring multiple environment variables can be listed with a single `--env` flag, `-e ENV_KEY1=value1 ENV_KEY2=value2`
+
+**`-f | --env-file`**
+
+- Specify paths to environment variable file(s)
+- Can be absolute path or relative path to application's root path
+- Individual lines in an environment variable file should match the syntax used by the `--env` flag to declare an environment variable
+- Specifying multiple environment variable files can be listed with a single `--env-file` flag, `-f .envFile1 path/to/.envFile2`
+
+**`-c | --component`**
+
+- Name of component(s) to run in local development server
+- Can be a list of component names with a single `--component` flag, `-c component1 component2`
+- If the `--component` flag is present, but component names are omitted, the local development server will run no components
+- **Default:** Runs all components defined in an application's Noopfiles
+
+**`-r, --resource`**
+
+- Name of resource(s) to run in local development server
+- Can be a list of resource names with a single `--resource` flag, `-r resource1 resource2`
+- If the `--resource` flag is present, but resource names are omitted, the local development server will run no resource
+- **Default:** Runs all resources defined in an application's Noopfiles
+
+### Inspect
+
+**`noop inspect [noopfiles] [components] [resources] [routes]`**
+
+Analyzes a Noop application from its root path, and returns a JSON object with summary of the application in the terminal window. To inspect a specified aspects of an application, include one or more of the following "types" with the `noop inspect` command: `noopfiles`, `components`, `resources`, `routes`. If a "type" is omitted, all details will be provided.
+
+**`-R | --root-path`**
+
+- Same functionality as `--root-path` flag's usage with `run` command
+
+### Reset
+
+**`noop reset [resourceName1] [resourceName2]`**
+
+The state of an application's resources persist between executions of the `run` command. To clear the state of a specified resource include its name after entering `noop reset` into your terminal window. You can reset multiple resources at once by listing their names.
+
+**`-R | --root-path`**
+
+- Same functionality as `--root-path` flag's usage with `run` command
+
+### Reset
+
+**`noop route [method] [path]`**
+
+Evaluate what component a specific request will be routed to based on `ROUTE` directives in an application's Noopfiles. Valid options for `method` include `GET`, `PUT`, `POST`, `DELETE`, and `OPTIONS`. `path` option should match the pattern expected to be included in the HTTP header of a request to the application. E.g: `noop route GET /api/foo/bar`
+
+**`-R | --root-path`**
+
+- Same functionality as `--root-path` flag's usage with `run` command
