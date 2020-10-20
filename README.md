@@ -21,7 +21,7 @@ Interactive command line interface for local development of Noop applications.
 
 ## Package Install
 
-`npm install -g noop-local`
+**`npm install -g noop-local`**
 
 ## CLI Commands
 
@@ -73,12 +73,12 @@ Run a Noop application on a local development server with auto-reloading when fi
 
 - Name of resource(s) to run in local development server
 - Can be a list of resource names with a single `--resource` flag, `-r resource1 resource2`
-- If the `--resource` flag is present, but resource names are omitted, the local development server will run no resource
+- If the `--resource` flag is present, but resource names are omitted, the local development server will run no resources
 - **Default:** Runs all resources defined in an application's Noopfiles
 
 ### Inspect
 
-**`noop inspect [noopfiles] [components] [resources] [routes]`**
+**`noop inspect [noopfiles] [components] [resources] [routes] [--root-path path/to/root]`**
 
 Analyzes a Noop application from its root path, and returns a JSON object with summary of the application in the terminal window. To inspect a specified aspects of an application, include one or more of the following "types" with the `noop inspect` command: `noopfiles`, `components`, `resources`, `routes`. If a "type" is omitted, all details will be provided.
 
@@ -88,7 +88,7 @@ Analyzes a Noop application from its root path, and returns a JSON object with s
 
 ### Reset
 
-**`noop reset [resourceName1] [resourceName2]`**
+**`noop reset [resourceName1] [resourceName2] [--root-path path/to/root]`**
 
 The state of an application's resources persist between executions of the `run` command. To clear the state of a specified resource include its name after entering `noop reset` into your terminal window. You can reset multiple resources at once by listing their names.
 
@@ -98,7 +98,7 @@ The state of an application's resources persist between executions of the `run` 
 
 ### Route
 
-**`noop route [path] [method]`**
+**`noop route [path] [method] [--root-path path/to/root]`**
 
 Evaluate what component a specific request will be routed to based on `ROUTE` directives in an application's Noopfiles. `path` option should match the pattern expected to be included in the HTTP header of a request to the application. Valid options for `method` include `GET`, `PUT`, `POST`, `DELETE`, and `OPTIONS`. If method is omitted, `GET` will be used by default.
 
