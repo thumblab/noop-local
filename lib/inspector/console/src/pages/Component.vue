@@ -5,15 +5,15 @@
       <b-button-toolbar class="float-right">
         <PerformanceBar :path="`/components/${this.$route.params.componentId}/performance`" />
         <b-button-group class="ml-2">
-          <b-button variant="warning" v-if="component.type === 'task'" v-b-modal.run-modal><icon icon="redo" /> Run</b-button>
+          <b-button variant="warning" v-if="component.type === 'task'" v-b-modal.run-modal><icon icon="redo" /> Execute</b-button>
           <b-button variant="warning" v-b-modal.restart-modal><icon icon="sync" /> Restart</b-button>
         </b-button-group>
       </b-button-toolbar>
     </div>
     <div class="clearfix"></div>
-    <b-modal v-if="component.type === 'task'" id="run-modal" title="Run Confirmation" @ok="handleRun" okTitle="Run!" okVariant="warning">
+    <b-modal v-if="component.type === 'task'" id="run-modal" title="Execute Confirmation" @ok="handleRun" okTitle="Execute!" okVariant="warning">
       <p class="text-left">
-        Are you sure you want to run the <strong>{{component.id}}</strong> component?
+        Are you sure you want to execute the <strong>{{component.id}}</strong> component?
       </p>
     </b-modal>
     <b-modal id="restart-modal" title="Restart Confirmation" @ok="handleRestart" okTitle="Restart!" okVariant="warning">
