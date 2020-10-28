@@ -1,6 +1,6 @@
 const expressWs = require('express-ws')
 const express = require('express')
-const request = require('request')
+const fetch = require('node-fetch')
 
 class DiagnosticsInterface {
   constructor (proxies) {
@@ -38,30 +38,39 @@ class DiagnosticsInterface {
   }
 
   sendDiagnosticRequest (port, req, res) {
-    const diagRequestOpts = {
-      uri: `http://localhost:${port}${req.body.path}`,
-      headers: req.body.headers || {},
-      method: req.body.method || 'GET'
-    }
-    if (req.body.body) diagRequestOpts.body = Buffer.from(JSON.stringify(req.body.body), 'base64')
-    request(diagRequestOpts, (err, diagResponse, body) => {
-      if (err) {
+    const resHeaders = {}
+    let resStatusCode
+    let resStatusMessage
+    const { headers, method, body } = req.body
+    fetch(`http://localhost:${port}${req.body.path}`, {
+      headers: headers || {},
+      method: method || 'GET',
+      body: body ? Buffer.from(JSON.stringify(body), 'base64') : null
+    })
+      .then(response => {
+        response.headers.forEach((value, key) => {
+          resHeaders[key] = value
+        })
+        resStatusCode = response.status
+        resStatusMessage = response.statusText
+        return response.text()
+      })
+      .then(body => {
+        res.json({
+          headers: resHeaders,
+          statusCode: resStatusCode,
+          statusMessage: resStatusMessage,
+          body: typeof body === 'string' ? Buffer.from(body).toString('base64') : body || null
+        })
+      })
+      .catch(err => {
         res.json({
           headers: {},
           statusCode: 500,
           statusMessage: err.message,
           body: null
         })
-      } else {
-        if (typeof body === 'string') body = Buffer.from(body).toString('base64')
-        res.json({
-          headers: diagResponse.headers,
-          statusCode: diagResponse.statusCode,
-          statusMessage: diagResponse.statusMessage,
-          body: body || null
-        })
-      }
-    })
+      })
   }
 }
 

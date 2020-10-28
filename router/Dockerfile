@@ -1,4 +1,4 @@
-FROM node:12-alpine
+FROM node:14-alpine
 WORKDIR /router
 COPY package*.json ./
 RUN npm ci
