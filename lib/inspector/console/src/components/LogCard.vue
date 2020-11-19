@@ -10,7 +10,7 @@
       </div>
     </template>
     <div v-if="simple" class="simple">
-      <div v-for="log in filteredLogs" v-bind:key="log.id" :title="log.time.format('hh:mm:ss.SSS')">
+      <div v-for="log in filteredLogs" v-bind:key="log.id" :title="log.time" class="pre-wrap">
         {{log.data}}
       </div>
     </div>
@@ -19,8 +19,8 @@
         <div v-if="log.json">
           <LogTreeItem :log="log" />
         </div>
-        <div v-else>
-          <b-badge variant="dark">{{log.time.format('hh:mm:ss.SSS')}}</b-badge> {{log.data}}
+        <div v-else class="pre-wrap">
+          <b-badge variant="dark">{{log.time}}</b-badge> {{log.data}}
         </div>
       </b-list-group-item>
     </b-list-group>
@@ -41,9 +41,12 @@ export default {
     return {
       connected: false,
       logs: [],
+      newLogs: [],
+      interval: null,
       ws: null,
       simple: false,
-      filter: ''
+      filter: '',
+      scroll: false
     }
   },
   computed: {
@@ -54,6 +57,30 @@ export default {
   },
   created () {
     this.stream()
+  },
+  mounted () {
+    this.interval = setInterval(() => {
+      if (this.newLogs.length) {
+        if (this.logs.length + this.newLogs.length > 1000) {
+          this.logs.splice(0, this.logs.length + this.newLogs.length - 1000)
+        }
+        if (this.newLogs.length > 1000) {
+          this.logs.push(...this.newLogs.splice(this.newLogs.length - 1000, 1000))
+        } else {
+          this.logs.push(...this.newLogs.splice(0, this.newLogs.length))
+        }
+        if (this.$refs.scroller) this.scroll = true
+      }
+    }, 2000)
+  },
+  updated () {
+    if (this.scroll && this.$refs.scroller) {
+      this.$refs.scroller.scrollTop = this.$refs.scroller.scrollHeight
+    }
+    this.scroll = false
+  },
+  beforeDestroy () {
+    clearInterval(this.interval)
   },
   methods: {
     stream () {
@@ -77,9 +104,11 @@ export default {
         } catch (err) {
           return console.error('WS msg parse error', err)
         }
-        payload = payload.map((log) => {
+        const formatLog = (log) => {
+          if (!log.data.trim()) return false
           log.id = Buffer.from(log.time + log.data).toString('hex').substring(0, 64)
-          log.time = moment(log.time)
+          log.time = moment(log.time).format('hh:mm:ss.SSS')
+          log.data = log.data.trim()
           if (/^\{.+\}$/.test(log.data)) {
             try {
               log.json = JSON.parse(log.data)
@@ -88,13 +117,17 @@ export default {
             }
           }
           return log
-        })
-        this.logs = this.logs.concat(payload).sort((a, b) => {
-          return a.time > b.time
-        })
-        setTimeout(() => {
-          if (this.$refs.scroller) { this.$refs.scroller.scrollTop = this.$refs.scroller.scrollHeight }
-        }, 50)
+        }
+        if (Array.isArray(payload)) {
+          payload = payload.map((log) => formatLog(log)).filter(Boolean)
+          this.logs = payload
+          if (this.$refs.scroller) this.scroll = true
+        } else if (payload.data.trim()) {
+          if (this.newLogs.length >= 1000) {
+            this.newLogs.splice(0, this.logs.length - 999)
+          }
+          this.newLogs.push(formatLog(payload))
+        }
       }
     }
   }
@@ -102,12 +135,8 @@ export default {
 </script>
 
 <style>
-.scroll {
+.scroll, .logs-card {
   overflow-y: scroll;
-}
-
-.logs-card {
-  flex-grow: 1;
 }
 
 .logs-card .list-group {
@@ -134,5 +163,9 @@ export default {
 
 .fullwidth {
   width: 100%;
+}
+
+.pre-wrap {
+  white-space: pre-wrap;
 }
 </style>

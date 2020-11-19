@@ -22,7 +22,7 @@
       </p>
     </b-modal>
     <div class="row flexrow">
-      <div class="col-6 flex full">
+      <div class="col-6 flex full scroll">
 
         <div id="accordion" class="text-left">
           <b-card no-body class="mb-3">
