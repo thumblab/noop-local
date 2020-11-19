@@ -9,19 +9,19 @@
         </b-form>
       </div>
     </template>
-    <div v-if="simple" class="simple">
-      <div v-for="log in filteredLogs" v-bind:key="log.id" :title="log.time" class="pre-wrap">
-        {{log.data}}
-      </div>
-    </div>
+    <b-list-group v-if="simple" flush class="simple">
+      <b-list-group-item v-for="(log, idx) in filteredLogs" v-bind:key="`${idx}-${log.id}`" :title="log.time" class="pre-wrap">
+        <b-card-body>{{log.data}}</b-card-body>
+      </b-list-group-item>
+    </b-list-group>
     <b-list-group v-else flush class="scroll fullwidth" ref="scroller">
-      <b-list-group-item v-for="log in filteredLogs" v-bind:key="log.id">
-        <div v-if="log.json">
+      <b-list-group-item v-for="(log, idx) in filteredLogs" v-bind:key="`${idx}-${log.id}`">
+        <b-card-body v-if="log.json">
           <LogTreeItem :log="log" />
-        </div>
-        <div v-else class="pre-wrap">
-          <b-badge variant="dark">{{log.time}}</b-badge> {{log.data}}
-        </div>
+        </b-card-body>
+        <b-card-body v-else class="pre-wrap">
+          <b-badge variant="dark">{{log.time}}</b-badge>{{log.data}}
+        </b-card-body>
       </b-list-group-item>
     </b-list-group>
   </b-card>
@@ -43,10 +43,12 @@ export default {
       logs: [],
       newLogs: [],
       interval: null,
-      ws: null,
+      source: null,
       simple: false,
       filter: '',
-      scroll: false
+      scroll: false,
+      numOfLogs: 1000,
+      logsInterval: 100
     }
   },
   computed: {
@@ -61,17 +63,17 @@ export default {
   mounted () {
     this.interval = setInterval(() => {
       if (this.newLogs.length) {
-        if (this.logs.length + this.newLogs.length > 1000) {
-          this.logs.splice(0, this.logs.length + this.newLogs.length - 1000)
+        if (this.logs.length + this.newLogs.length > this.numOfLogs) {
+          this.logs.splice(0, this.logs.length + this.newLogs.length - this.numOfLogs)
         }
-        if (this.newLogs.length > 1000) {
-          this.logs.push(...this.newLogs.splice(this.newLogs.length - 1000, 1000))
+        if (this.newLogs.length > this.numOfLogs) {
+          this.logs.push(...this.newLogs.splice(this.newLogs.length - this.numOfLogs, this.numOfLogs))
         } else {
           this.logs.push(...this.newLogs.splice(0, this.newLogs.length))
         }
         if (this.$refs.scroller) this.scroll = true
       }
-    }, 2000)
+    }, this.logsInterval)
   },
   updated () {
     if (this.scroll && this.$refs.scroller) {
@@ -81,28 +83,35 @@ export default {
   },
   beforeDestroy () {
     clearInterval(this.interval)
+    if (this.source) this.source.close()
   },
   methods: {
     stream () {
-      const url = `${baseUrl}${this.path}`.replace('http:', 'ws:')
-      this.ws = new WebSocket(url)
-      console.log(`Connecting to component logs websocket ${url}`)
-      this.ws.onopen = () => {
+      const url = `${baseUrl}${this.path}`
+      this.source = new EventSource(url)
+      console.log(`Connecting to component logs eventstream ${url}`)
+      this.source.onopen = () => {
         this.connected = true
       }
-      this.ws.onclose = () => {
+      this.source.onclose = () => {
         this.connected = false
+        this.source = null
       }
-      this.ws.onerror = (err) => {
-        console.error(err)
-        this.connected = false
+      this.source.onerror = (err) => {
+        if (this.connected) {
+          console.error(err)
+          this.connected = false
+        } else {
+          this.source.close()
+        }
       }
-      this.ws.onmessage = (msg) => {
+      this.source.onmessage = (msg) => {
+        this.connected = true
         let payload
         try {
           payload = JSON.parse(msg.data)
         } catch (err) {
-          return console.error('WS msg parse error', err)
+          return console.error('eventstream msg parse error', err)
         }
         const formatLog = (log) => {
           if (!log.data.trim()) return false
@@ -123,8 +132,8 @@ export default {
           this.logs = payload
           if (this.$refs.scroller) this.scroll = true
         } else if (payload.data.trim()) {
-          if (this.newLogs.length >= 1000) {
-            this.newLogs.splice(0, this.logs.length - 999)
+          if (this.newLogs.length >= this.numOfLogs) {
+            this.newLogs.splice(0, this.logs.length - this.numOfLogs - 1)
           }
           this.newLogs.push(formatLog(payload))
         }
@@ -144,8 +153,16 @@ export default {
   font-size: 0.8em;
 }
 
+.logs-card .card-body {
+  padding: 0;
+}
+
 .logs-card .list-group-item {
   padding: 4px 10px;
+}
+
+.logs-card .list-group-item .badge {
+  margin-right: 4px
 }
 
 .limit {
@@ -153,7 +170,6 @@ export default {
 }
 
 .simple {
-  margin: 12px;
   overflow: scroll;
   white-space: nowrap;
   height: 100%;

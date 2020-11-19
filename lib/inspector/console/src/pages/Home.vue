@@ -30,7 +30,7 @@
             <b-list-group-item button v-for="component in components" v-bind:key="component.id" @click="$router.push(`/components/${component.id}`)">
               <strong>{{component.id}}</strong><b-badge class="float-right" variant="info">{{component.type}}</b-badge>
               <br />
-              <small>{{component.root.substring(app.root.length)}}</small>
+              <small v-if="component.root && app.root">{{component.root.substring(app.root.length)}}</small>
             </b-list-group-item>
           </b-list-group>
           <p v-if="!components.length">No components available</p>

@@ -33,8 +33,8 @@ export default {
   created () {
     this.stream()
   },
-  destroyed () {
-    this.source.close()
+  beforeDestroy () {
+    if (this.source) this.source.close()
   },
   methods: {
     stream () {
@@ -45,12 +45,18 @@ export default {
       }
       this.source.onclose = () => {
         this.connected = false
+        this.source = null
       }
       this.source.onerror = (err) => {
-        console.error(err)
-        this.connected = false
+        if (this.connected) {
+          console.error(err)
+          this.connected = false
+        } else {
+          this.source.close()
+        }
       }
       this.source.onmessage = (msg) => {
+        this.connected = true
         let payload
         try {
           payload = JSON.parse(msg.data)
