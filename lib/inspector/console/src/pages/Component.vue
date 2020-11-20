@@ -22,7 +22,7 @@
       </p>
     </b-modal>
     <div class="row flexrow">
-      <div class="col-6 flex full">
+      <div class="col-6 flex full scroll">
 
         <div id="accordion" class="text-left">
           <b-card no-body class="mb-3">
@@ -47,7 +47,7 @@
                       <router-link :to="`/resources/${resourceId}`">{{resourceId}}</router-link>
                     </li>
                   </ul>
-                  <ul v-else><li>none</li></ul>
+                  <ul v-else class="float-right"><li>none</li></ul>
                 </b-list-group-item>
                 <b-list-group-item>
                   <strong>Routes Serviced</strong>
@@ -56,7 +56,7 @@
                       {{route.method}} {{route.pattern}} <b-badge v-if="route.internal" variant="warning">internal</b-badge>
                     </li>
                   </ul>
-                  <ul v-else><li>none</li></ul>
+                  <ul v-else class="float-right"><li>none</li></ul>
                 </b-list-group-item>
               </b-list-group>
             </b-collapse>
