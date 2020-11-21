@@ -43,7 +43,12 @@ const yargs = require('yargs')
           alias: 'r',
           type: 'array',
           description: 'Name of resource(s) to run'
-        }
+        },
+        'router-logging': {
+          alias: 'l',
+          type: 'boolean',
+          describe: 'Output global router logs'
+        },
       })
   }, (argv) => {
     runCommand(argv)
